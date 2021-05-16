@@ -1,32 +1,39 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+    <left-side-bar />
+    <Header />
+    <Content/>
   </div>
 </template>
+<script>
+import Content from './components/common/Content.vue';
+import Header from './components/common/Header.vue';
+import LeftSideBar from './components/common/LeftSideBar.vue';
 
+export default {
+  components: { LeftSideBar, Header, Content },
+  name: 'App',
+};
+</script>
 <style>
+* {
+  margin: 0;
+  padding: 0;
+}
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+  font-family: MISA-Regular, MISA-Bold, MISA-Italic;
+  font-size: 13px;
 }
-
-#nav {
-  padding: 30px;
+@font-face {
+  font-family: "MISA-Regular";
+  src: url("./assets/font/GoogleSans-Regular.otf");
 }
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
+@font-face {
+  font-family: "MISA-Bold";
+  src: url("./assets/font/GoogleSans-Bold.otf");
 }
-
-#nav a.router-link-exact-active {
-  color: #42b983;
+@font-face {
+  font-family: "MISA-Italic";
+  src: url("./assets/font/GoogleSans-Italic.otf");
 }
 </style>
