@@ -1,10 +1,10 @@
 <template>
-    <div class="content">
+  <div class="content">
     <div class="content-header">
       <div class="title">
         <p>DANH SÁCH KHÁCH HÀNG</p>
       </div>
-      <div class="btn-insert" @click="ShowDialog(infoCustomer)">
+      <div class="btn-insert" @click="ShowDialog(customer)">
         <div class="btn-insert-icon"></div>
         <div class="btn-insert-text">Thêm khách hàng</div>
       </div>
@@ -13,7 +13,7 @@
       <div class="box-search">
         <div class="box-search-icon"></div>
         <div class="box-search-input">
-          <input type="text" placeholder="Tìm kiếm theo mã, tên..."/>
+          <input type="text" placeholder="Tìm kiếm theo mã, tên..." />
         </div>
       </div>
       <div class="filter-customer-group"></div>
@@ -32,6 +32,7 @@
             <th>Ngày sinh</th>
             <th>Số diện thoại</th>
             <th>Email</th>
+            <th>Nhóm khách hàng</th>
             <th>Mã thẻ thành viên</th>
             <th>Mã số thuế</th>
             <th>Địa chỉ</th>
@@ -42,7 +43,7 @@
           <tr
             v-for="(customer, index) in listCustomer"
             :key="index"
-            @dblclick="ShowInfo(customer)"
+            @dblclick="ShowDialog(customer)"
           >
             <td>
               <input type="checkbox" value="" class="checkboxRow" />
@@ -57,6 +58,7 @@
             </td>
             <td>{{ customer.phone }}</td>
             <td>{{ customer.email }}</td>
+            <td>{{customer.customerGroupName}}</td>
             <td>
               {{ customer.memberCardCode }}
             </td>
@@ -68,7 +70,7 @@
       </table>
     </div>
     <!-- <div class="navigation"></div> -->
-    <Dialog v-show="isShow" @CloseDialog="isShow = false" ref= "show"></Dialog>
+    <Dialog v-show="isShow" @CloseDialog="isShow = false" ref="show"></Dialog>
   </div>
 </template>
 <script>
@@ -82,17 +84,19 @@ export default {
     return {
       listCustomer: null,
       isShow: false,
-      infoCustomer: {
+      customer: {
         customerCode: '',
         fullname: '',
         gender: 1,
-        birthday: null,
+        birthday: new Date(),
         phone: '',
         email: '',
         memberCardCode: '',
         taxCode: '',
         address: '',
         company: '',
+        customerGroupName: 'Thường',
+        customerGroupId: '',
       },
     };
   },
@@ -103,17 +107,13 @@ export default {
   },
   methods: {
     /**
-       * Hàm hiện thị dialog
-       */
+     * Hàm hiện thị dialog
+     */
     ShowDialog(val) {
       this.isShow = true;
       this.$refs.show.ShowCustomer(val);
     },
-    ShowInfo(val) {
-      console.log(val);
-      this.isShow = true;
-      this.$refs.show.ShowCustomer(val);
-    },
+
   },
 };
 </script>
@@ -281,6 +281,7 @@ tr:hover td {
 .grid thead th {
   position: sticky;
   background-color: #ffffff;
+  top: 0;
 }
 th,
 td {

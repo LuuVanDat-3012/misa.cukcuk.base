@@ -28,6 +28,9 @@
                     ref="search"
                     class="imposition"
                     v-model="infoCustomer.customerCode"
+                    :class="{ warning: isWarningCode }"
+                    @keyup="isWarningCode = false"
+                    placeholder="Mã nhân viên"
                   />
                 </div>
               </div>
@@ -35,12 +38,15 @@
                 <div class="input-title">
                   Họ và tên <b style="color: red">(*)</b>
                 </div>
-                <div class="input-box">
+                <div class="input-box" >
                   <input
                     type="text"
                     name="CFullname"
                     class="imposition"
                     v-model="infoCustomer.fullname"
+                    placeholder="Họ và tên"
+                    :class="{ warning: isWarningName }"
+                    @keyup="isWarningName = false"
                   />
                 </div>
               </div>
@@ -54,17 +60,28 @@
                     type="text"
                     name="memberCardCode"
                     v-model="infoCustomer.memberCardCode"
+                    placeholder="Mã thẻ thành viên"
                   />
                 </div>
               </div>
               <div class="input-code-card input-common">
                 <div class="input-title">Nhóm khách hàng</div>
                 <div class="input-box">
-                  <select name="groundId" id="">
-                    <option value="">Kế toán</option>
-                    <option value="">Trưởng phòng</option>
-                    <option value="">Phó phòng</option>
-                    <option value="">Nhân sự</option>
+                  <select
+                    name="groundId"
+                    id=""
+                    v-model="infoCustomer.customerGroupName"
+                  >
+                    <!-- eslint-disable-next-line vue/max-attributes-per-line -->
+                    <option
+                      value=""
+                      v-for="(item, index) in listGroup"
+                      :key="index"
+                      id="item.customerGroupName"
+                      class="item.customerGroupName"
+                    >
+                      {{ item.customerGroupName }}
+                    </option>
                   </select>
                 </div>
               </div>
@@ -73,10 +90,16 @@
               <div class="input-birthday input-common">
                 <div class="input-title">Ngày sinh</div>
                 <div class="input-box">
-                  <input
+                  <!-- <input
                     type="date"
                     name="CBirthday"
                     v-model="infoCustomer.birthday"
+                    placeholder="dd/MM/yyyy"
+                  /> -->
+                  <DatePicker
+                    v-model="infoCustomer.birthday"
+                    format="dd/MM/yyyy"
+                    width="260px"
                   />
                 </div>
               </div>
@@ -142,6 +165,9 @@
                     type="text"
                     class="imposition"
                     v-model="infoCustomer.phone"
+                    placeholder="Sô điện thoại"
+                    :class="{ warning: isWarningPhone }"
+                     @keyup="isWarningPhone = false"
                   />
                 </div>
               </div>
@@ -156,6 +182,7 @@
                   type="text"
                   name="CCompany"
                   v-model="infoCustomer.company"
+                  placeholder="Tên công ty"
                 />
               </div>
             </div>
@@ -166,7 +193,7 @@
                   <input
                     type="text"
                     name="CTaxCode"
-                    placeholder="Nhập mã số thuế"
+                    placeholder="Mã số thuế"
                     v-model="infoCustomer.taxCode"
                   />
                 </div>
@@ -189,17 +216,25 @@
         </div>
         <!-- FOOTER -->
         <div class="dialog-footer">
-          <div class="btn-cancel" @click="CloseDialog">HUỶ</div>
-          <div class="btn-save">LƯU</div>
+          <div class="btn-cancel">
+            <button @click="CloseDialog">HUỶ</button>
+          </div>
+          <div class="btn-save">
+            <button @click="ValidateCustomer">LƯU</button>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </template>
 <script>
+import DatePicker from 'vuejs-datepicker';
+
 export default {
   name: 'Dialog',
-  components: {},
+  components: {
+    DatePicker,
+  },
   data() {
     return {
       textCode: 'Mã khách hàng (*)',
@@ -218,7 +253,14 @@ export default {
         taxCode: '',
         address: '',
         company: '',
+        customerGroupName: 'Thường',
+        customerGroupId: '',
       },
+      listGroup: null,
+      isDisabled: false,
+      isWarningName: false,
+      isWarningCode: false,
+      isWarningPhone: false,
     };
   },
   methods: {
@@ -237,9 +279,33 @@ export default {
     ShowCustomer(val) {
       this.infoCustomer = val;
     },
+    ValidateData(val) {
+      if (val === null || val === '') {
+        return false;
+      }
+      return true;
+    },
+    ValidateCustomer() {
+      if (!this.ValidateData(this.infoCustomer.customerCode)) {
+        this.isWarningCode = true;
+        return false;
+      }
+      if (!this.ValidateData(this.infoCustomer.fullname)) {
+        this.isWarningName = true;
+        return false;
+      }
+      if (!this.ValidateData(this.infoCustomer.phone)) {
+        this.isWarningPhone = true;
+        return false;
+      }
+      return true;
+    },
   },
   mounted() {
     this.FocusInput();
+    this.axios('/api/CustomerGroups').then((response) => {
+      this.listGroup = response.data;
+    });
   },
 };
 </script>
@@ -263,6 +329,8 @@ export default {
   top: calc(50% - 410px);
   left: calc(50% - 600px);
   animation: animationDialog 0.5s forwards;
+  border: 1px solid #bbbbbb;
+  border-radius: 2px;
 }
 .dialog-content {
   display: flex;
@@ -356,6 +424,7 @@ input[type="radio"] {
   padding-right: 25px;
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
 }
 .input-title {
   width: 100%;
@@ -363,6 +432,7 @@ input[type="radio"] {
 }
 .input-box {
   flex: 1;
+  box-sizing: border-box;
 }
 .input-box input {
   height: 40px;
@@ -370,6 +440,7 @@ input[type="radio"] {
   border: 1px solid #d2d2d2;
   border-radius: 3px;
   padding-left: 8px;
+  box-sizing: border-box;
 }
 .input-box input:focus {
   outline: 0;
@@ -387,6 +458,9 @@ input[type="radio"] {
   border: 1px solid #d2d2d2;
   border-radius: 3px;
   padding-left: 8px;
+}
+.input-box select:focus {
+  outline: 0;
 }
 .radioGender {
   display: flex;
@@ -454,7 +528,7 @@ input[type="radio"] {
   height: 40px;
 }
 .box-center-address input {
-  width: 836px;
+  width: 825px;
   height: 40px;
   border: 1px solid #d2d2d2;
   padding-left: 10px;
@@ -487,11 +561,17 @@ input[type="radio"] {
   padding: 6px 16px;
   box-sizing: border-box;
 }
-.btn-cancel {
-  padding: 10px 24px;
+.btn-cancel button {
+  padding: 6px 16px;
   font-size: 15px;
+  color: #000000;
+  align-content: center;
+  text-align: center;
+  line-height: 24px;
+  border: 0;
+  border-radius: 3px;
 }
-.btn-save {
+.btn-save button {
   padding: 6px 16px;
   background-color: #019160;
   font-size: 15px;
@@ -499,9 +579,10 @@ input[type="radio"] {
   align-content: center;
   text-align: center;
   line-height: 24px;
+  border: 0;
   border-radius: 3px;
 }
-.btn-save:hover {
+.btn-save button:hover {
   background-color: #2fbebe;
   cursor: pointer;
 }
@@ -530,9 +611,14 @@ input[type="radio"] {
 }
 
 /**
-Định dạng datetime
+Định dạng dcảnh báo
 */
-.customerBirthday {
-  width: 260px;
+.warning {
+  border: 1px solid #c80000 !important;
+}
+
+.date-picker{
+  width: 200px;
+  height: 40px;
 }
 </style>
