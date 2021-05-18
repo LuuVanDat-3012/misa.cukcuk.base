@@ -4,7 +4,7 @@
       <div class="title">
         <p>DANH SÁCH KHÁCH HÀNG</p>
       </div>
-      <div class="btn-insert" @click="ShowDialog(customer)">
+      <div class="btn-insert" @click="ShowDialog(customer)"  accesskey="g">
         <div class="btn-insert-icon"></div>
         <div class="btn-insert-text">Thêm khách hàng</div>
       </div>
