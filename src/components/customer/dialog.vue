@@ -89,17 +89,16 @@
             <div class="box-input-up">
               <div class="input-birthday input-common">
                 <div class="input-title">Ngày sinh</div>
-                <div class="input-box">
+                <div class="input-box ">
                   <!-- <input
                     type="date"
                     name="CBirthday"
                     v-model="infoCustomer.birthday"
                     placeholder="dd/MM/yyyy"
                   /> -->
-                  <DatePicker
+                  <DatePicker class="datepicker " style="width: 200px"
                     v-model="infoCustomer.birthday"
                     format="dd/MM/yyyy"
-                    width="260px"
                   />
                 </div>
               </div>
@@ -621,9 +620,8 @@ input[type="radio"] {
 .warning {
   border: 1px solid #c80000 !important;
 }
-
-.date-picker{
-  width: 200px;
-  height: 40px;
+.datepicker div input{
+  width: 250px;
+  height: 50px;
 }
 </style>

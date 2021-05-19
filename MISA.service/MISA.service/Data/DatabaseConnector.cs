@@ -10,7 +10,7 @@ namespace MISA.service.Data
 {
     public class DatabaseConnector<TEntity>
     {
-        static string connectionString = "Host = localhost; Port = 3306;Database = lvdat_misa_cukcuk; User Id = root ;Password = lovanmet1;Character Set=utf8";
+        static string connectionString = "Host = localhost; Port = 3306;Database = lvdat_misa_cukcuk; User Id = root ;Password = luudet0512ld;Character Set=utf8";
                             
         string className = typeof(TEntity).Name;
         IDbConnection _bConnection;

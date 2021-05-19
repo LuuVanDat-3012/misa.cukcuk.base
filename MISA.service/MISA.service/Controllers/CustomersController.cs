@@ -1,8 +1,8 @@
 ﻿using Dapper;
 using Microsoft.AspNetCore.Mvc;
+using MISA.ApplicationCore;
+using MISA.Infrastructure.Model;
 using MISA.service.Data;
-using MISA.service.Model;
-using MISA.service.Service;
 using MySqlConnector;
 using System;
 using System.Collections.Generic;
@@ -18,44 +18,42 @@ namespace MISA.service.Controllers
     [ApiController]
     public class CustomersController : ControllerBase
     {
-        
+        public string connectionString;
+        CustomerService customerService = new CustomerService();
+
+
         // GET: api/<CustomersController>
         [HttpGet]
         public List<Customer> Get()
         {
-            List<Customer> customers = new List<Customer>();
-            string connectionString = "Host = localhost; Port = 3306;Database = lvdat_misa_cukcuk; User Id = root ;Password = lovanmet1;Character Set=utf8";
-            using (IDbConnection db = new MySqlConnection(connectionString))
-            {
-                //Lấy dữ liệu
-                customers = db.Query<Customer>($"Proc_GetCustomers", commandType: CommandType.StoredProcedure).ToList();
-            }
-            return customers;
+            
+            return customerService.GetCustomers();
         }
 
         // GET api/<CustomersController>/5
         [HttpGet("{id}")]
         public Customer Get(Guid id)
         {
-
-            Customer customer = new Customer();
-            string connectionString = "Host = localhost; Port = 3306;Database = lvdat_misa_cukcuk; User Id = root ;Password = lovanmet1;Character Set=utf8";
-            
-            using (IDbConnection db = new MySqlConnection(connectionString))
-            {
-                //Lấy dữ liệu
-                var sql = $"Select * From Customer where customerId = '{id.ToString()}'";
-                customer = db.Query<Customer>(sql).FirstOrDefault();
-            }
-
-            return customer;
+            return customerService.GetCustomerById(id);
         }
+        /// <summary>
+        ///  API trả về 1 danh sách KH theo mã và tên
+        /// </summary>
+        /// <param name="code">Mã khach hàng cần tìm</param>
+        /// <param name="name">Tên cần tìm</param>
+        /// <returns> 1 danh sách khách hàng cần tìm</returns>
+        [HttpGet("search")]
+        public List<Customer> GetCustomerByCodeAndName([FromQuery] string code, [FromQuery] string name)
+        {
+            return customerService.GetCustomerByCodeAndName(code, name);
+        }
+
 
         // POST api/<CustomersController>
         [HttpPost]
         public int Post([FromBody] Customer customer)
         {
-            var sqlQuery = $"INSERT INTO customer(CustomerId, CustomerCode, Fullname, Phone) VALUES(" +
+            var sqlQuery = $"INSERT INTO customer(CustomerId, CustomerCode, Fullname, Phone, CreatedBy, CreatedDate, ModifiedBy) VALUES(" +
                 $"'{Guid.NewGuid().ToString()}'," +
                 $"'{customer.CustomerCode.ToString()}'," +
                 $"'{customer.Fullname.ToString()}'," +

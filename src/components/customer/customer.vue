@@ -249,7 +249,7 @@ CSS bảng khách hàng
 .grid {
   width: 100%;
   position: relative;
-  height: 690px;
+  height: 550px;
   overflow-y: auto;
   margin-top: 10px;
 }
@@ -266,9 +266,9 @@ table {
   border-spacing: 0;
   height: 590px;
 }
-tr:nth-child(even) {
+/* tr:nth-child(even) {
   background-color: #d1f7cf;
-}
+} */
 tr {
   text-align: center;
   height: 40px;
