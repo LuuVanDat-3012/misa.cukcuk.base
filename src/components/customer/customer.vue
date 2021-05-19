@@ -4,7 +4,11 @@
       <div class="title">
         <p>DANH SÁCH KHÁCH HÀNG</p>
       </div>
-      <div class="btn-insert" @click="ShowDialog(customer)"  accesskey="g">
+      <div
+        class="btn-insert"
+        @click="ShowDialog('11111111-1111-1111-1111-111111111111')"
+        accesskey="g"
+      >
         <div class="btn-insert-icon"></div>
         <div class="btn-insert-text">Thêm khách hàng</div>
       </div>
@@ -16,7 +20,9 @@
           <input type="text" placeholder="Tìm kiếm theo mã, tên..." />
         </div>
       </div>
-      <div class="filter-customer-group"></div>
+      <div class="filter-customer-group">
+        <DropDown />
+      </div>
       <div class="btn-refresh">
         <div class="btn-refresh-icon"></div>
       </div>
@@ -43,7 +49,7 @@
           <tr
             v-for="(customer, index) in listCustomer"
             :key="index"
-            @dblclick="ShowDialog(customer)"
+            @dblclick="ShowDialog(customer.customerId)"
           >
             <td>
               <input type="checkbox" value="" class="checkboxRow" />
@@ -58,7 +64,7 @@
             </td>
             <td>{{ customer.phone }}</td>
             <td>{{ customer.email }}</td>
-            <td>{{customer.customerGroupName}}</td>
+            <td>{{ customer.customerGroupName }}</td>
             <td>
               {{ customer.memberCardCode }}
             </td>
@@ -70,40 +76,29 @@
       </table>
     </div>
     <!-- <div class="navigation"></div> -->
-    <Dialog v-show="isShow" @CloseDialog="isShow = false" ref="show"></Dialog>
   </div>
 </template>
 <script>
-import Dialog from './dialog.vue';
+// eslint-disable-next-line import/extensions
+import DropDown from '../dropdown/index';
 
 export default {
   components: {
-    Dialog,
+    DropDown,
   },
   data() {
     return {
       listCustomer: null,
       isShow: false,
-      customer: {
-        customerCode: '',
-        fullname: '',
-        gender: 1,
-        birthday: new Date(),
-        phone: '',
-        email: '',
-        memberCardCode: '',
-        taxCode: '',
-        address: '',
-        company: '',
-        customerGroupName: 'Thường',
-        customerGroupId: '',
-      },
     };
   },
   mounted() {
-    this.axios('/api/Customers').then((response) => {
+    this.axios.get('Customers').then((response) => {
       this.listCustomer = response.data;
     });
+    // this.axios.post('Customers', ).then((response) => {
+    //   this.listCustomer = response.data;
+    // });
   },
   methods: {
     /**
@@ -111,9 +106,8 @@ export default {
      */
     ShowDialog(val) {
       this.isShow = true;
-      this.$refs.show.ShowCustomer(val);
+      this.$parent.$emit('ShowDialog', val);
     },
-
   },
 };
 </script>
@@ -175,6 +169,10 @@ CSS button thêm khách hàng
 .btn-insert:hover {
   background-color: #2fbe8e;
   cursor: pointer;
+}
+/**CSS dropdown customer group */
+.filter-customer-group {
+  padding-left:20px ;
 }
 /**
 CSS button refresh
@@ -269,7 +267,7 @@ table {
   height: 590px;
 }
 tr:nth-child(even) {
-  background-color: #fafafa;
+  background-color: #d1f7cf;
 }
 tr {
   text-align: center;

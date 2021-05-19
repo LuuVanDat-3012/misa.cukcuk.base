@@ -35,7 +35,7 @@ namespace MISA.service.Controllers
 
         // GET api/<CustomersController>/5
         [HttpGet("{id}")]
-        public ActionServiceResult Get(Guid id)
+        public Customer Get(Guid id)
         {
 
             Customer customer = new Customer();
@@ -47,14 +47,8 @@ namespace MISA.service.Controllers
                 var sql = $"Select * From Customer where customerId = '{id.ToString()}'";
                 customer = db.Query<Customer>(sql).FirstOrDefault();
             }
-         
-            return new ActionServiceResult()
-            {
-                Message = "Thanh cong",
-                MISAcode = Enumeration.MISAcode.Success,
-                Success = true,
-                data = customer
-            };
+
+            return customer;
         }
 
         // POST api/<CustomersController>

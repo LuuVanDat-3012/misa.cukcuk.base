@@ -15,14 +15,11 @@
   </div>
 </template>
 <script>
-
 export default {
   name: 'Header',
-  components: {
-  },
+  components: {},
   mounted() {
-    this.axios('/api/CustomerGroups').then((response) => {
-      console.log(response.data);
+    this.axios.get('CustomerGroups').then((response) => {
       this.listRes = response.data;
     });
   },

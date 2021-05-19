@@ -243,6 +243,7 @@ export default {
       textPhone: 'Số điện thoại',
       textTax: 'Mã số thuế',
       infoCustomer: {
+        customerId: '',
         customerCode: '',
         fullname: '',
         gender: 1,
@@ -277,7 +278,11 @@ export default {
       }, 0);
     },
     ShowCustomer(val) {
-      this.infoCustomer = val;
+      if (val !== '') {
+        this.axios(`Customers/${val}`).then((response) => {
+          this.infoCustomer = response.data;
+        });
+      }
     },
     ValidateData(val) {
       if (val === null || val === '') {
@@ -303,7 +308,7 @@ export default {
   },
   mounted() {
     this.FocusInput();
-    this.axios('/api/CustomerGroups').then((response) => {
+    this.axios('CustomerGroups').then((response) => {
       this.listGroup = response.data;
     });
   },
@@ -326,8 +331,8 @@ export default {
   background-color: #ffffff;
   z-index: 99999999;
   position: absolute;
-  top: calc(50% - 410px);
-  left: calc(50% - 600px);
+  top: calc(50% - 350px);
+  left: calc(50% - 450px);
   animation: animationDialog 0.5s forwards;
   border: 1px solid #bbbbbb;
   border-radius: 2px;

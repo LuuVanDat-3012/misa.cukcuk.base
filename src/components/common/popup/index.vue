@@ -4,21 +4,9 @@
     <div class="drop-content">
       <div
         class="item"
-        @click="
-          GetCustomerGroup(
-            '11111111-1111-1111-1111-111111111111',
-            'Tất cả các khách hàng'
-          )
-        "
-      >
-        <div :class="{ contentIcon: isHover }" class="content-icon-null"></div>
-        <div class="content-text">Tất cả khách hàng</div>
-      </div>
-      <div
-        class="item"
         v-for="(item, index) in customerGroup"
         :key="index"
-        @click="GetCustomerGroup(item.customerGroupId, item.customerGroupName)"
+        @click="GetCustomerGroup(item)"
       >
         <div :class="{ contentIcon: isHover }" class="content-icon-null"></div>
         <div class="content-text">{{ item.customerGroupName }}</div>
@@ -27,11 +15,14 @@
   </div>
 </template>
 <script>
+// optional css
+import '@invisiburu/vue-picker/dist/vue-picker.min.css';
+
 export default {
   components: {},
   data() {
     return {
-      customerGroup: null,
+      customerGroup: [],
       isHover: false,
       title: {
         customerGroupId: '11111111-1111-1111-1111-111111111111',
@@ -40,9 +31,8 @@ export default {
     };
   },
   methods: {
-    GetCustomerGroup(id, name) {
-      this.title.customerGroupId = id;
-      this.title.customerGroupName = name;
+    GetCustomerGroup(val) {
+      this.title = val;
     },
   },
   mounted() {
@@ -68,11 +58,9 @@ export default {
   height: 40px;
   border: 1px solid #bbbbbb;
   text-align: left;
-  font-size: 14px;
-  font-weight: bolder;
 }
 .dropbtn:hover {
-  border: 1px solid #019160;
+  border: 2px solid #019160;
 }
 .drop-content {
   display: none;
@@ -81,7 +69,7 @@ export default {
   min-width: 200px;
   background-color: #ffffff;
   padding-top: 3px;
-  animation: animationPopup 2s forwards;
+   animation: animationPopup 2s forwards;
 }
 .dropdown:hover .drop-content {
   display: block;
@@ -95,10 +83,11 @@ export default {
   align-items: center;
   border-left: 1px;
   color: #000;
-  animation: fadein 2s;
-  -moz-animation: fadein 2s; /* Firefox */
-  -webkit-animation: fadein 2s; /* Safari and Chrome */
-  -o-animation: fadein 2s; /* Opera */
+   animation: fadein 2s;
+    -moz-animation: fadein 2s; /* Firefox */
+    -webkit-animation: fadein 2s; /* Safari and Chrome */
+    -o-animation: fadein 2s; /* Opera */
+
 }
 .content-icon-null {
   width: 46px;
@@ -123,38 +112,35 @@ export default {
   border: 2px solid #019169 !important;
 }
 @keyframes fadein {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+    from {
+        opacity:0;
+    }
+    to {
+        opacity:1;
+    }
 }
-@-moz-keyframes fadein {
-  /* Firefox */
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+@-moz-keyframes fadein { /* Firefox */
+    from {
+        opacity:0;
+    }
+    to {
+        opacity:1;
+    }
 }
-@-webkit-keyframes fadein {
-  /* Safari and Chrome */
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+@-webkit-keyframes fadein { /* Safari and Chrome */
+    from {
+        opacity:0;
+    }
+    to {
+        opacity:1;
+    }
 }
-@-o-keyframes fadein {
-  /* Opera */
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+@-o-keyframes fadein { /* Opera */
+    from {
+        opacity:0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 </style>

@@ -4,6 +4,7 @@ import router from './router';
 import store from './store';
 import './libs/axios';
 import './filter/filter';
+import './filter/toast';
 
 Vue.config.productionTip = false;
 new Vue({
