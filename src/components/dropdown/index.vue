@@ -1,7 +1,10 @@
 <template>
   <div class="dropdown">
-    <button class="dropbtn">{{ title.customerGroupName }}</button>
-    <div class="drop-content">
+    <div class="dropbtn">
+      <div class="dropbtn-text">{{ title.customerGroupName }}</div>
+      <div class="dropbtn-icon" @click="isClick = !isClick"></div>
+    </div>
+    <div class="drop-content" v-show="isClick">
       <div
         class="item"
         @click="
@@ -11,7 +14,7 @@
           )
         "
       >
-        <div :class="{ contentIcon: isHover }" class="content-icon-null"></div>
+        <div :class="{ contentIcon: isHover }" class="content-icon-default"></div>
         <div class="content-text">Tất cả khách hàng</div>
       </div>
       <div
@@ -20,7 +23,7 @@
         :key="index"
         @click="GetCustomerGroup(item.customerGroupId, item.customerGroupName)"
       >
-        <div :class="{ contentIcon: isHover }" class="content-icon-null"></div>
+        <div class="content-icon-default"></div>
         <div class="content-text">{{ item.customerGroupName }}</div>
       </div>
     </div>
@@ -33,6 +36,7 @@ export default {
     return {
       customerGroup: null,
       isHover: false,
+      isClick: false,
       title: {
         customerGroupId: '11111111-1111-1111-1111-111111111111',
         customerGroupName: 'Tất cả các khách hàng',
@@ -43,6 +47,7 @@ export default {
     GetCustomerGroup(id, name) {
       this.title.customerGroupId = id;
       this.title.customerGroupName = name;
+      this.isClick = false;
     },
   },
   mounted() {
@@ -59,7 +64,7 @@ export default {
   width: 200px;
 }
 .dropbtn {
-  padding: 6px 16px 6px 16px;
+  display: flex;
   background-color: #ffffff;
   color: #000;
   width: 200px;
@@ -67,26 +72,40 @@ export default {
   border-radius: 4px;
   height: 40px;
   border: 1px solid #bbbbbb;
-  text-align: left;
   font-size: 14px;
   font-weight: bolder;
+  box-sizing: border-box;
+  align-items: center;
+}
+.dropbtn-text {
+  width: 160px;
+  height: 100%;
+  line-height: 40px;
+  padding-left: 10px;
+}
+.dropbtn-icon {
+  width: 40px;
+  height: 40px;
+  background-image: url("../../assets/icon/down-arrow.png");
+  background-repeat: no-repeat;
+  background-size: 16px;
+  background-position: center;
+  border-left: 1px solid #bbbbbb;
 }
 .dropbtn:hover {
   border: 1px solid #019160;
 }
 .drop-content {
-  display: none;
+  display: block;
   position: absolute;
   z-index: 99999999999999;
-  min-width: 200px;
+  width: 198px;
   background-color: #ffffff;
   padding-top: 3px;
   animation: animationPopup 2s forwards;
+  border-left: 1px solid #bbbbbb ;
+  border-right: 1px solid #bbbbbb;
 }
-.dropdown:hover .drop-content {
-  display: block;
-}
-
 .item {
   width: 100%;
   display: flex;
@@ -100,7 +119,7 @@ export default {
   -webkit-animation: fadein 2s; /* Safari and Chrome */
   -o-animation: fadein 2s; /* Opera */
 }
-.content-icon-null {
+.content-icon-default {
   width: 46px;
   height: 16px;
 }

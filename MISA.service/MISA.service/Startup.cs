@@ -7,6 +7,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using MISA.ApplicationCore;
+using MISA.ApplicationCore.Interface;
+using MISA.Infrastructure;
 using MISA.service.Data;
 using System;
 using System.Collections.Generic;
@@ -27,7 +30,8 @@ namespace MISA.service
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddScoped<ICustomerRepository, CustomerRepository>();
+            services.AddScoped<ICustomerService, CustomerService>();
             services.AddControllers();
             services.AddCors();
             services.AddSwaggerGen(c =>

@@ -1,6 +1,6 @@
 ﻿using Dapper;
 using Microsoft.AspNetCore.Mvc;
-using MISA.service.Model;
+using MISA.Entity.Model;
 using MySqlConnector;
 using System;
 using System.Collections.Generic;
@@ -21,7 +21,7 @@ namespace MISA.service.Controllers
         public List<CustomerGroup> Get()
         {
             List<CustomerGroup> customerGroups = new List<CustomerGroup>();
-            string connectionString = "Host = localhost; Port = 3306;Database = lvdat_misa_cukcuk; User Id = root ;Password = luudet0512ld;Character Set=utf8";
+            string connectionString = "Host = localhost; Port = 3306;Database = lvdat_misa_cukcuk; User Id = root ;Password = lovanmet1;Character Set=utf8";
             using (IDbConnection db = new MySqlConnection(connectionString))
             {
                 //Lấy dữ liệu

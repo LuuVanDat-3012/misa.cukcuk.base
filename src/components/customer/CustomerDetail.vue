@@ -96,7 +96,7 @@
                     v-model="infoCustomer.birthday"
                     placeholder="dd/MM/yyyy"
                   /> -->
-                  <DatePicker class="datepicker " style="width: 200px"
+                  <DatePicker class="datepicker "
                     v-model="infoCustomer.birthday"
                     format="dd/MM/yyyy"
                   />
@@ -313,7 +313,7 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style >
 .dialog-model {
   position: absolute;
   top: 0;
@@ -621,7 +621,7 @@ input[type="radio"] {
   border: 1px solid #c80000 !important;
 }
 .datepicker div input{
-  width: 250px;
-  height: 50px;
+  width: 260px;
+  height: 40px;
 }
 </style>

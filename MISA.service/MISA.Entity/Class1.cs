@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MISA.Infrastructure
+namespace MISA.Entity
 {
     public class Class1
     {

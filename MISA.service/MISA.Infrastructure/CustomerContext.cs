@@ -1,5 +1,5 @@
 ﻿using Dapper;
-using MISA.Infrastructure.Model;
+using MISA.Entity.Model;
 using MySqlConnector;
 using System;
 using System.Collections.Generic;
@@ -11,8 +11,13 @@ namespace MISA.Infrastructure
 {
     public class CustomerContext
     {
-       
-        string connectionString = "Host = localhost; Port = 3306;Database = lvdat_misa_cukcuk; User Id = root ;Password = luudet0512ld;Character Set=utf8";
+
+        string connectionString = "Host = localhost; Port = 3306;Database = lvdat_misa_cukcuk; User Id = root ;Password = lovanmet1;Character Set=utf8";
+        IDbConnection dbConnection;
+        public CustomerContext()
+        {
+            dbConnection = new MySqlConnection(connectionString);
+        }
         #region Method
         /// <summary>
         /// Lấy toàn bộ danh sách kahchs hàng
@@ -25,10 +30,8 @@ namespace MISA.Infrastructure
         {
             {
                 //    //Kết nói tới CSDL
-                var dbConnection = new MySqlConnection(connectionString);
                 //    //Khỏi tạo các commandText
                 var customers = dbConnection.Query<Customer>($"Proc_GetCustomers", commandType: CommandType.StoredProcedure).ToList();
-
                 //    //Trả về dữ kiệu
                 return customers;
             }
@@ -39,11 +42,11 @@ namespace MISA.Infrastructure
         /// <param name="customerId"></param>
         /// <returns>! khách hàng</returns>
         /// CreatedBy : LVDat (19/05/2021)
-        
+
         public Customer GetCustomerById(Guid customerId)
         {
             //Kết nối tới CSDL
-            var dbConnection = new MySqlConnection(connectionString);
+
             //Khoir taoj cacs commandText
             var customer = dbConnection.Query<Customer>($"Proc_GetCustomerById", new { customerId = customerId.ToString() }, commandType: CommandType.StoredProcedure).FirstOrDefault();
             //Trả về dữ liệu
@@ -52,15 +55,25 @@ namespace MISA.Infrastructure
 
         public List<Customer> GetCustomerByCodeAndName(string code, string name)
         {
-            //Kết nối tới CSDL
-            var dbConnection = new MySqlConnection(connectionString);
             //Khoir taoj cacs commandText
             var customer = dbConnection.Query<Customer>($"Proc_GetCustomersByCodeAndName", new { customerCode = code, customerName = name }, commandType: CommandType.StoredProcedure).ToList();
             //Trả về dữ liệu
             return customer;
         }
 
-        //Thêm mới khách hàng
+        /// <summary>
+        /// Thêm mới 1 khách hàng
+        /// </summary>
+        /// <param name="customer">Thông tin khách hàng cần thêm mới</param>
+        /// CreatedBy: LVDat (20/05/2021)
+        public void InsertCustomer(Customer customer)
+        {
+            //Validate trường CustomerGroupId
+            customer.GroupId = customer.CustomerGroupId.ToString();
+            //Khởi tạo các commandText
+            var affectRow = dbConnection.Execute($"Proc_InsertCustomer", customer, commandType: CommandType.StoredProcedure);
+
+        }
 
         //Sửa thông tin
 

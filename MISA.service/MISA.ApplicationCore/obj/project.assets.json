@@ -32,11 +32,22 @@
           "lib/netcoreapp2.0/_._": {}
         }
       },
+      "MISA.Entity/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v3.1",
+        "compile": {
+          "bin/placeholder/MISA.Entity.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/MISA.Entity.dll": {}
+        }
+      },
       "MISA.Infrastructure/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v3.1",
         "dependencies": {
           "Dapper": "2.0.90",
+          "MISA.Entity": "1.0.0",
           "MySqlConnector": "1.3.8"
         },
         "compile": {
@@ -156,6 +167,11 @@
         "version.txt"
       ]
     },
+    "MISA.Entity/1.0.0": {
+      "type": "project",
+      "path": "../MISA.Entity/MISA.Entity.csproj",
+      "msbuildProject": "../MISA.Entity/MISA.Entity.csproj"
+    },
     "MISA.Infrastructure/1.0.0": {
       "type": "project",
       "path": "../MISA.Infrastructure/MISA.Infrastructure.csproj",
@@ -164,23 +180,24 @@
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v3.1": [
+      "MISA.Entity >= 1.0.0",
       "MISA.Infrastructure >= 1.0.0"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Dat\\.nuget\\packages\\": {}
+    "C:\\Users\\lvdat\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Dat\\Documents\\CukCukBase\\misa.cukcuk.base\\MISA.service\\MISA.ApplicationCore\\MISA.ApplicationCore.csproj",
+      "projectUniqueName": "C:\\Users\\lvdat\\Documents\\MISA.CUKCUK\\misa.cukcuk.base\\MISA.service\\MISA.ApplicationCore\\MISA.ApplicationCore.csproj",
       "projectName": "MISA.ApplicationCore",
-      "projectPath": "C:\\Users\\Dat\\Documents\\CukCukBase\\misa.cukcuk.base\\MISA.service\\MISA.ApplicationCore\\MISA.ApplicationCore.csproj",
-      "packagesPath": "C:\\Users\\Dat\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Dat\\Documents\\CukCukBase\\misa.cukcuk.base\\MISA.service\\MISA.ApplicationCore\\obj\\",
+      "projectPath": "C:\\Users\\lvdat\\Documents\\MISA.CUKCUK\\misa.cukcuk.base\\MISA.service\\MISA.ApplicationCore\\MISA.ApplicationCore.csproj",
+      "packagesPath": "C:\\Users\\lvdat\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\lvdat\\Documents\\MISA.CUKCUK\\misa.cukcuk.base\\MISA.service\\MISA.ApplicationCore\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Dat\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\lvdat\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -194,8 +211,11 @@
         "netcoreapp3.1": {
           "targetAlias": "netcoreapp3.1",
           "projectReferences": {
-            "C:\\Users\\Dat\\Documents\\CukCukBase\\misa.cukcuk.base\\MISA.service\\MISA.Infrastructure\\MISA.Infrastructure.csproj": {
-              "projectPath": "C:\\Users\\Dat\\Documents\\CukCukBase\\misa.cukcuk.base\\MISA.service\\MISA.Infrastructure\\MISA.Infrastructure.csproj"
+            "C:\\Users\\lvdat\\Documents\\MISA.CUKCUK\\misa.cukcuk.base\\MISA.service\\MISA.Entity\\MISA.Entity.csproj": {
+              "projectPath": "C:\\Users\\lvdat\\Documents\\MISA.CUKCUK\\misa.cukcuk.base\\MISA.service\\MISA.Entity\\MISA.Entity.csproj"
+            },
+            "C:\\Users\\lvdat\\Documents\\MISA.CUKCUK\\misa.cukcuk.base\\MISA.service\\MISA.Infrastructure\\MISA.Infrastructure.csproj": {
+              "projectPath": "C:\\Users\\lvdat\\Documents\\MISA.CUKCUK\\misa.cukcuk.base\\MISA.service\\MISA.Infrastructure\\MISA.Infrastructure.csproj"
             }
           }
         }
@@ -224,7 +244,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.202\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.102\\RuntimeIdentifierGraph.json"
       }
     }
   }

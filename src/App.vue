@@ -3,21 +3,21 @@
     <left-side-bar />
     <Header />
     <Content @ShowDialog="ShowDialog" />
-    <Dialog v-show="isShow" ref="dialog"  @CloseDialog='CloseDialog'></Dialog>
+    <CustomerDetail v-show="isShow" ref="dialog"  @CloseDialog='CloseDialog'></CustomerDetail>
   </div>
 </template>
 <script>
 import Content from './components/common/Content.vue';
 import Header from './components/common/Header.vue';
 import LeftSideBar from './components/common/LeftSideBar.vue';
-import Dialog from './components/customer/dialog.vue';
+import CustomerDetail from './components/Customer/CustomerDetail.vue';
 
 export default {
   components: {
     LeftSideBar,
     Header,
     Content,
-    Dialog,
+    CustomerDetail,
   },
   name: 'App',
   data() {

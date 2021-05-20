@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using static MISA.service.Model.Enumeration;
+using static MISA.Entity.Model.Enumeration;
 
-namespace MISA.service.Model
+namespace MISA.Entity.Model
 {
     public class ActionServiceResult
     {
