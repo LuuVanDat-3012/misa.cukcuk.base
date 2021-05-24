@@ -1,9 +1,0 @@
-C:\Users\lvdat\Documents\MISA.CUKCUK\misa.cukcuk.base\MISA.service\MISA.Entity\bin\Debug\netcoreapp3.1\MISA.Entity.deps.json
-C:\Users\lvdat\Documents\MISA.CUKCUK\misa.cukcuk.base\MISA.service\MISA.Entity\bin\Debug\netcoreapp3.1\MISA.Entity.dll
-C:\Users\lvdat\Documents\MISA.CUKCUK\misa.cukcuk.base\MISA.service\MISA.Entity\bin\Debug\netcoreapp3.1\MISA.Entity.pdb
-C:\Users\lvdat\Documents\MISA.CUKCUK\misa.cukcuk.base\MISA.service\MISA.Entity\obj\Debug\netcoreapp3.1\MISA.Entity.csprojAssemblyReference.cache
-C:\Users\lvdat\Documents\MISA.CUKCUK\misa.cukcuk.base\MISA.service\MISA.Entity\obj\Debug\netcoreapp3.1\MISA.Entity.AssemblyInfoInputs.cache
-C:\Users\lvdat\Documents\MISA.CUKCUK\misa.cukcuk.base\MISA.service\MISA.Entity\obj\Debug\netcoreapp3.1\MISA.Entity.AssemblyInfo.cs
-C:\Users\lvdat\Documents\MISA.CUKCUK\misa.cukcuk.base\MISA.service\MISA.Entity\obj\Debug\netcoreapp3.1\MISA.Entity.csproj.CoreCompileInputs.cache
-C:\Users\lvdat\Documents\MISA.CUKCUK\misa.cukcuk.base\MISA.service\MISA.Entity\obj\Debug\netcoreapp3.1\MISA.Entity.dll
-C:\Users\lvdat\Documents\MISA.CUKCUK\misa.cukcuk.base\MISA.service\MISA.Entity\obj\Debug\netcoreapp3.1\MISA.Entity.pdb
