@@ -54,7 +54,7 @@ namespace MISA.Infrastructure
         public int UpdateEntity(TEntity entity)
         {
             var param = MappingDataType<TEntity>(entity);
-            var result = _dbConnection.Execute($"Proc_Update{_tableName}", commandType: CommandType.StoredProcedure);
+            var result = _dbConnection.Execute($"Proc_Update{_tableName}",param, commandType: CommandType.StoredProcedure);
             //Trả về dữ kiệu
             return result;
         }

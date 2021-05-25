@@ -40,7 +40,7 @@ namespace MISA.Web.Controllers
         }
 
         // PUT api/<BaseEntitiesController>/5
-        [HttpPut("{id}")]
+        [HttpPut]
         public IActionResult Put( [FromBody] TEntity entity)
         {
             return Ok(_baseService.UpdateEntity(entity));

@@ -276,16 +276,17 @@ BEGIN
 END
 $$
 
+
 DELIMITER ;
 
 -- 
 -- Dumping data for table customergroup
 --
 INSERT INTO customergroup VALUES
-('19165ed7-212e-21c4-0428-030d4265475f', 'Edmonds2029', '1986-07-11 04:11:11', 'Vanita Edmonds', '1982-07-17 09:06:20', 'Scot Acker'),
-('2924c34d-68f1-1d0a-c9c7-6c0aeb6ec302', 'Luisa1960', '1989-02-13 10:41:28', 'Kathyrn Beatty', '1970-01-01 00:31:40', 'Abram Patten'),
-('3631011e-4559-4ad8-b0ad-cb989f2177da', 'Kruger3', '1987-05-16 03:18:29', 'Kennith Carswell', '1970-01-01 00:00:07', 'Albert Mclean'),
-('7a0b757e-41eb-4df6-c6f8-494a84b910f4', 'Tanja943', '2012-03-15 13:32:10', 'Cary Benitez', '1970-01-01 00:00:09', 'Adelaida Bergman');
+('19165ed7-212e-21c4-0428-030d4265475f', 'Thường', '1986-07-11 04:11:11', 'Vanita Edmonds', '1982-07-17 09:06:20', 'Scot Acker'),
+('2924c34d-68f1-1d0a-c9c7-6c0aeb6ec302', 'Vip', '1989-02-13 10:41:28', 'Kathyrn Beatty', '1970-01-01 00:31:40', 'Abram Patten'),
+('3631011e-4559-4ad8-b0ad-cb989f2177da', 'Super Vip', '1987-05-16 03:18:29', 'Kennith Carswell', '1970-01-01 00:00:07', 'Albert Mclean'),
+('7a0b757e-41eb-4df6-c6f8-494a84b910f4', 'Khác', '2012-03-15 13:32:10', 'Cary Benitez', '1970-01-01 00:00:09', 'Adelaida Bergman');
 
 -- 
 -- Dumping data for table customer

@@ -31,7 +31,7 @@ namespace MISA.ApplicationCore.Service
             {
                 return new ActionServiceResult()
                 {
-                    Message = "Thêm không thành công",
+                    Message = e.Message,
                     Success = false,
                     MISAcode = Enumeration.MISAcode.Exception,
                     data = 0
@@ -64,7 +64,7 @@ namespace MISA.ApplicationCore.Service
 
         public ActionServiceResult GetEntityById(Guid entityId)
         {
-            var entity = _baseRepository.DeleteEntity(entityId);
+            var entity = _baseRepository.GetEntityById(entityId);
             if (entity != null)
             {
                 return new ActionServiceResult()
