@@ -1,0 +1,122 @@
+.popup-model {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  z-index: 9999;
+  opacity: 0.6;
+}
+.popup {
+  width: 500px;
+  height: 204px;
+  background-color: #ffffff;
+  z-index: 99999999;
+  position: absolute;
+  top: calc(50% - 204px);
+  left: calc(50% - 350px);
+  animation: 0.5s forwards;
+  border: 1px solid #bbbbbb;
+  border-radius: 2px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 4px;
+  color: #000000;
+}
+/**
+  CSS title popup
+  */
+.popup-title {
+  width: 100%;
+  height: 60px;
+  box-sizing: border-box;
+}
+.content-title {
+  width: 428px;
+  height: 24px;
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  right: 48px;
+  bottom: 12px;
+  box-sizing: border-box;
+  font-family: MISA-Bold;
+  font-size: 15px;
+}
+.btn-close{
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 24px;
+    height: 24px;
+    background-image: url('../../../assets/icon/close-button.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+/**
+CSS content popup
+*/
+.popop-content {
+  height: 84px;
+  width: 100%;
+  box-sizing: border-box;
+}
+.content-icon{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin: 12px 0px 0px 24px;
+    background-image: url('../../../assets/icon/warning.png');
+    background-repeat: no-repeat;
+    background-size: 30px;
+    background-position: center;
+}
+.content-text{
+    width: 402px;
+    height: 48px;
+    position: absolute;
+    top: 72px;
+    left: 74px;
+    right: 24px;
+    bottom: 84px;
+    word-wrap: break-word;
+}
+/**
+CSS buttons
+*/
+.popup-button {
+  height: 60px;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #f4f4f4;
+}
+.btn-cancel{
+    height: 40px;
+    width: 70px;
+    position: absolute;
+    right: 104px;
+    bottom: 10px;
+    box-sizing: border-box;
+    line-height: 40px;
+}
+.btn-cancel:hover{
+    background-color: #e5e5e5;
+    cursor: pointer;
+}
+
+.btn-confirm{
+    height: 40px;
+    width: 70px;
+    position: absolute;
+    right: 24px;
+    bottom: 10px;
+    box-sizing: border-box;
+    background-color: #f65454;
+    line-height: 40px;
+    text-align: center;
+    color: #ffffff;
+}
+.btn-confirm:hover{
+    cursor: pointer;
+}

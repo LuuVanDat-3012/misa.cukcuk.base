@@ -3,14 +3,14 @@
     <left-side-bar />
     <Header />
     <Content @ShowDialog="ShowDialog" />
-    <CustomerDetail v-show="isShow" ref="dialog"  @CloseDialog='CloseDialog'></CustomerDetail>
+    <CustomerDetail v-show="isShow" ref="dialog" @CloseDialog="CloseDialog"></CustomerDetail>
   </div>
 </template>
 <script>
 import Content from './components/common/Content.vue';
 import Header from './components/common/Header.vue';
 import LeftSideBar from './components/common/LeftSideBar.vue';
-import CustomerDetail from './components/Customer/CustomerDetail.vue';
+import CustomerDetail from './components/customer/CustomerDetail.vue';
 
 export default {
   components: {

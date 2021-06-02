@@ -6,7 +6,7 @@
 </template>
 <script>
 
-import Customer from '../Customer/Customer.vue';
+import Customer from '../customer/customer.vue';
 // eslint-disable-next-line import/extensions
 
 export default {

@@ -1,0 +1,91 @@
+/**
+  CSS phần filter
+  */
+.content-filter {
+  height: 50px;
+  width: 100%;
+  display: flex;
+}
+.filter-customer-group {
+  padding-left: 20px;
+}
+
+
+/**
+  CSS phần nhập thông tin tìm kiếm
+   */
+.box-search {
+  height: 40px;
+  width: 250px;
+  display: flex;
+  border: 1px solid #bbbbbb;
+  box-sizing: border-box;
+  border-radius: 3px;
+}
+.box-search-icon {
+  width: 40px;
+  height: 100%;
+  background-image: url("../../../assets/icon/search.png");
+  background-repeat: no-repeat;
+  background-position: 12px 11px;
+}
+.box-search-input {
+  width: 207px;
+  height: 100%;
+  box-sizing: border-box;
+}
+.box-search-input input {
+  width: 100%;
+  height: 100%;
+  border: none;
+  outline: 0;
+}
+.box-search:hover {
+  border: 1px solid #019160;
+}
+.box-search-input input:focus .box-search {
+  border: 1px solid #019160;
+}
+/**
+  CSS button refresh
+   */
+   .btn-refresh {
+    height: 40px;
+    width: 40px;
+    align-items: center;
+    border: 1px solid #bbbbbb;
+    border-radius: 3px;
+    position: absolute;
+    right: 24px;
+    box-sizing: border-box;
+  }
+  .btn-refresh-icon {
+    width: 30px;
+    height: 30px;
+    background-image: url("../../../assets/icon/refresh.png");
+    background-repeat: no-repeat;
+    background-position: 9px 9px;
+  }
+  .btn-refresh:hover {
+    background-color: #e9bebe;
+    cursor: pointer;
+  }
+  .btn-delete{
+    height: 40px;
+    width: 40px;
+    align-items: center;
+    border: 1px solid #bbbbbb;
+    border-radius: 3px;
+    position: absolute;
+    right: 66px;
+    box-sizing: border-box;
+    line-height: 40px;
+    justify-content: center;
+  }
+  .btn-delete p {
+    padding-left: 7px;
+  }
+  .btn-delete:hover {
+    background-color: #e9bebe;
+    cursor: pointer;
+  }

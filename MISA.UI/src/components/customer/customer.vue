@@ -1,36 +1,10 @@
 <template>
   <div class="content">
-    <div class="content-header">
-      <div class="title">
-        <p>DANH SÁCH KHÁCH HÀNG</p>
-      </div>
-      <div
-        class="btn-insert"
-        @click="ShowDialog('11111111-1111-1111-1111-111111111111')"
-        accesskey="g"
-      >
-        <div class="btn-insert-icon"></div>
-        <div class="btn-insert-text">Thêm khách hàng</div>
-      </div>
-    </div>
-    <div class="content-filter">
-      <div class="box-search">
-        <div class="box-search-icon"></div>
-        <div class="box-search-input">
-          <input type="text" placeholder="Tìm kiếm theo mã, tên..." />
-        </div>
-      </div>
-      <div class="filter-customer-group">
-        <DropDown />
-      </div>
-      <div class="btn-refresh" @click="RefreshCustomers">
-        <div class="btn-refresh-icon"></div>
-      </div>
-    </div>
+    <Filter />
     <div class="grid">
       <table>
         <thead>
-          <tr :class="{loaded : tr}" >
+          <tr :class="{ loaded: tr }">
             <th></th>
             <th>Mã khách hàng</th>
             <th>Họ và tên</th>
@@ -49,7 +23,7 @@
           <tr
             v-for="(customer, index) in listCustomer"
             :key="index"
-            @dblclick="ShowDialog(customer.customerId)"
+            @dblclick="ShowDialog(customer.id)"
           >
             <td>
               <input type="checkbox" value="" class="checkboxRow" />
@@ -84,11 +58,12 @@
 <script>
 // eslint-disable-next-line import/extensions
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
-import DropDown from '../dropdown/index.vue';
+import Filter from './filter/index.vue'
 
 export default {
   components: {
-    DropDown, PulseLoader,
+    PulseLoader,
+    Filter,
   },
   data() {
     return {
@@ -100,7 +75,7 @@ export default {
   },
   mounted() {
     this.axios.get('Customers').then((response) => {
-      this.listCustomer = response.data;
+      this.listCustomer = response.data.data;
       this.isLoaded = false;
     });
     // this.axios.post('Customers', ).then((response) => {
@@ -122,13 +97,12 @@ export default {
       this.isLoaded = true;
       this.tr = false;
       this.axios.get('Customers').then((response) => {
-        this.listCustomer = response.data;
+        this.listCustomer = response.data.data;
         this.isLoaded = false;
         this.tr = true;
       });
     },
   },
-
 };
 </script>
 <style>

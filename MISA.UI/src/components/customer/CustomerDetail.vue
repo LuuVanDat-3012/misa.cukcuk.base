@@ -19,9 +19,7 @@
           <div class="input-info-up">
             <div class="box-input-up">
               <div class="input-code input-common">
-                <div class="input-title">
-                  Mã nhân viên <b style="color: red">(*)</b>
-                </div>
+                <div class="input-title">Mã nhân viên <b style="color: red">(*)</b></div>
                 <div class="input-box">
                   <input
                     type="text"
@@ -35,10 +33,8 @@
                 </div>
               </div>
               <div class="input-code input-common">
-                <div class="input-title">
-                  Họ và tên <b style="color: red">(*)</b>
-                </div>
-                <div class="input-box" >
+                <div class="input-title">Họ và tên <b style="color: red">(*)</b></div>
+                <div class="input-box">
                   <input
                     type="text"
                     name="CFullname"
@@ -67,11 +63,7 @@
               <div class="input-code-card input-common">
                 <div class="input-title">Nhóm khách hàng</div>
                 <div class="input-box">
-                  <select
-                    name="groundId"
-                    id=""
-                    v-model="infoCustomer.customerGroupName"
-                  >
+                  <select name="groundId" id="" v-model="infoCustomer.customerGroupName">
                     <!-- eslint-disable-next-line vue/max-attributes-per-line -->
                     <option
                       value=""
@@ -96,7 +88,8 @@
                     v-model="infoCustomer.birthday"
                     placeholder="dd/MM/yyyy"
                   /> -->
-                  <DatePicker class="datepicker "
+                  <DatePicker
+                    class="datepicker "
                     v-model="infoCustomer.birthday"
                     format="dd/MM/yyyy"
                   />
@@ -156,9 +149,7 @@
             </div>
             <div class="input-center-right">
               <div class="input-code-card input-common">
-                <div class="input-title">
-                  Số điện thoại <b style="color: red">(*)</b>
-                </div>
+                <div class="input-title">Số điện thoại <b style="color: red">(*)</b></div>
                 <div class="input-box">
                   <input
                     type="text"
@@ -166,7 +157,7 @@
                     v-model="infoCustomer.phone"
                     placeholder="Sô điện thoại"
                     :class="{ warning: isWarningPhone }"
-                     @keyup="isWarningPhone = false"
+                    @keyup="isWarningPhone = false"
                   />
                 </div>
               </div>
@@ -204,11 +195,7 @@
             <div class="input-center-address">
               <div class="input-title">Địa chỉ</div>
               <div class="box-center-address">
-                <input
-                  type="text"
-                  name="CAddress"
-                  v-model="infoCustomer.address"
-                />
+                <input type="text" name="CAddress" v-model="infoCustomer.address" />
               </div>
             </div>
           </div>
@@ -242,7 +229,7 @@ export default {
       textPhone: 'Số điện thoại',
       textTax: 'Mã số thuế',
       infoCustomer: {
-        customerId: '',
+        id: '',
         customerCode: '',
         fullname: '',
         gender: 1,
@@ -277,9 +264,12 @@ export default {
       }, 0);
     },
     ShowCustomer(val) {
+      console.log(val);
       if (val !== '') {
         this.axios(`Customers/${val}`).then((response) => {
-          this.infoCustomer = response.data;
+          if (response.data.data != null) {
+            this.infoCustomer = response.data.data;
+          }
         });
       }
     },
@@ -313,7 +303,7 @@ export default {
   },
 };
 </script>
-<style >
+<style>
 .dialog-model {
   position: absolute;
   top: 0;
@@ -620,7 +610,7 @@ input[type="radio"] {
 .warning {
   border: 1px solid #c80000 !important;
 }
-.datepicker div input{
+.datepicker div input {
   width: 260px;
   height: 40px;
 }

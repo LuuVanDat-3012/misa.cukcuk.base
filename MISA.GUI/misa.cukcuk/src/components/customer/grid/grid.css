@@ -1,0 +1,78 @@
+/**
+  CSS bảng khách hàng
+  */
+.grid {
+  width: 100%;
+  position: relative;
+  height: 550px;
+  overflow-y: auto;
+  margin-top: 10px;
+}
+.grid::-webkit-scrollbar {
+  background-color: #d2d2d2;
+  width: 6px;
+}
+.grid::-webkit-scrollbar-thumb {
+  border-top-right-radius: 6px;
+}
+table {
+  width: 100%;
+  border-spacing: 0;
+  height: 590px;
+  box-sizing: border-box;
+}
+/* tr:nth-child(even) {
+    background-color: #d1f7cf;
+  } */
+tr {
+  text-align: center;
+  max-height: 40px;
+  height: 40px;
+  box-sizing: border-box;
+}
+
+tr:hover td {
+  background-color: rgb(243, 235, 235);
+}
+th,
+td {
+  border-bottom: 1px solid #ddd;
+}
+.checkboxRow {
+  padding-top: 7px;
+  width: 18px;
+  height: 18px;
+}
+.titleRow{
+  position: sticky;
+  background-color: #ffffff;
+  top: 0;
+  left: 0;
+}
+
+
+
+.loaded {
+  animation: fadein 2s;
+  -moz-animation: fadein 2s; /* Firefox */
+  -webkit-animation: fadein 2s; /* Safari and Chrome */
+  -o-animation: fadein 2s; /* Opera */
+}
+.loading{
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff;
+  z-index: 5555;
+}
+.loading-icon{
+  width: 100px;
+  height: 40px;
+  position: absolute;
+  top:calc(50% - 20px);
+  left: calc(50% - 50px);
+}
