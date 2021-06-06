@@ -27,10 +27,11 @@ namespace MISA.Web.Controllers
             var result = _customerService.GetCustomerByName(name);
             return Ok(result);
         }
-        [HttpDelete("multiple")]
-        public IActionResult DeleteMultiple([FromBody] Guid[] guids)
+        [HttpPost("multiple")]
+        public IActionResult DeleteMultiple([FromBody] String[] recordData)
         {
-            var result = _customerService.DeleteMultiple(guids);
+            var tmp = recordData;
+            var result = _customerService.DeleteMultiple(recordData);
             return Ok(result);
         }
     }

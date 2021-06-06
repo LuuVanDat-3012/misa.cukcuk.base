@@ -7,16 +7,17 @@ namespace MISA.ApplicationCore.Interface
 {
     public interface IBaseService<TEntity>
     {
-        /// <summary>
-        /// Lấy danh sách đối tượng
-        /// </summary>
-        /// <returns>1 danh sách đối tượng</returns>
-        /// CreatedBy: LVDat (26/5/2021)
-        ActionServiceResult GetEntities();
+       /// <summary>
+       /// Phân trang đối tượng
+       /// </summary>
+       /// <param name="limit">Vị trí bắt đầu lấy</param>
+       /// <param name="offset">Số bản ghi muốn lấy</param>
+       /// <param name="propertySearch">Thông tin tìm kiếm</param>
+       /// <returns></returns>
+        ActionServiceResult GetEntities(int page, string propertySearch);
         /// <summary>
         /// Lấy theo id
         /// </summary>
-        /// <param name="entityId">id cần tìm</param>
         /// <returns>1 đối tượng</returns>
         /// CreatedBy: LVDat (26/5/2021)
         ActionServiceResult GetEntityById(Guid entityId);
@@ -41,5 +42,18 @@ namespace MISA.ApplicationCore.Interface
         /// <returns>Số dòng bị ảnh hưởng</returns>
         /// CreatedBy: LVDat (26/5/2021)
         ActionServiceResult DeleteEntity(Guid entityId);
+        /// <summary>
+        /// Phân trang danh sách entity
+        /// </summary>
+        /// <param name="entityName"></param>
+        /// <returns></returns>
+        ActionServiceResult PagingEntity(string entityInfo);
+
+        /// <summary>
+        /// Xoá danh sách theo id
+        /// </summary>
+        /// <param name="guids">đânh sách id</param>
+        /// <returns>Số dòng bị ảnh hưởng</returns>
+        ActionServiceResult DeeteMultiple(Guid[] guids);
     }
 }

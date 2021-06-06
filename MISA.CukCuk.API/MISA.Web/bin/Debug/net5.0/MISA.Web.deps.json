@@ -417,6 +417,9 @@
         }
       },
       "MISA.ApplicationCore/1.0.0": {
+        "dependencies": {
+          "Dapper": "2.0.90"
+        },
         "runtime": {
           "MISA.ApplicationCore.dll": {}
         },

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MISA.ApplicationCore.Entity;
 using MISA.ApplicationCore.Interface;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace MISA.Web.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("v1/api/[controller]")]
     [ApiController]
     public class BaseEntitiesController<TEntity> : ControllerBase
     {
@@ -20,9 +21,9 @@ namespace MISA.Web.Controllers
         }
         // GET: api/<BaseEntitiesController>
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult Get([FromQuery] int page, [FromQuery] string propertySearch)
         {
-            return Ok(_baseService.GetEntities());
+            return Ok(_baseService.GetEntities(page, propertySearch));
         }
 
         // GET api/<BaseEntitiesController>/5

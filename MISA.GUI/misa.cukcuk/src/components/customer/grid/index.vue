@@ -1,8 +1,5 @@
 <template>
   <div class="grid">
-    <div>
-      {{listDelete}}
-    </div>
     <table>
       <thead class="titleRow">
         <tr>
@@ -28,7 +25,7 @@
           class="contentRow"
         >
           <td>
-            <input type="checkbox" :value="customer.id" :id="customer.id" class="checkboxRow" v-model="listDelete" />
+            <input type="checkbox" :value="customer.id" :id="customer.id" class="checkboxRow" v-model="listIdDeleted" />
           </td>
           <td>{{ customer.customerCode }}</td>
           <td>{{ customer.fullname }}</td>
@@ -53,7 +50,6 @@
      <div class="loading" v-if="isLoading">
       <PulseLoader class="loading-icon"></PulseLoader>
     </div>
-
   </div>
 </template>
 <script>
@@ -68,18 +64,30 @@ export default {
       listCustomer: 1,
       isShow: false,
       isLoading: true,
-      fullPage: true,
-      listDelete: []
+      listIdDeleted: []
     }
   },
   methods: {
     ShowCustomerDetail (val) {
       this.$emit('ShowCustomerDetail', val)
     },
+    // Danh sách khách hàng theo tên
     ShowCustomers (val) {
       this.axios.get('Customers/search/' + val).then(response => {
         this.listCustomer = response.data.data
       })
+    },
+    LoadData () {
+      this.isLoading = true
+      this.axios.get('Customers').then(response => {
+        this.listCustomer = response.data.data
+        this.isLoading = false
+      })
+    }
+  },
+  computed: {
+    ConvertToString () {
+      return this.listIdDeleted.join("','")
     }
   },
   mounted () {

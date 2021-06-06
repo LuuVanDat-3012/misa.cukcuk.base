@@ -35,6 +35,13 @@ namespace MISA.ApplicationCore.Interface
         /// <param name="guids">danh sách id cần xoá</param>
         /// <returns>số dòng ảnh hưởng</returns>
         /// CreatedBy: LVDat (26/5/2021)
-        ActionServiceResult DeleteMultiple(Guid[] guids);
+        ActionServiceResult DeleteMultiple(String[] recordData);
+        /// <summary>
+        /// Lấy khách hàng theo mã (code)
+        /// </summary>
+        /// <param name="customerCode">Mã khách hàng</param>
+        /// <returns> 1 khách hàng</returns>
+        ///  CreatedBy: LVDat (03/5/2021)
+        ActionServiceResult GetCustomerByCode(string customerCode);
     }
 }

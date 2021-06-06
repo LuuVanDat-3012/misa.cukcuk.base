@@ -99,6 +99,8 @@ CSS buttons
     bottom: 10px;
     box-sizing: border-box;
     line-height: 40px;
+    border-radius: 3px;
+    text-align: center;
 }
 .btn-cancel:hover{
     background-color: #e5e5e5;
@@ -116,6 +118,7 @@ CSS buttons
     line-height: 40px;
     text-align: center;
     color: #ffffff;
+    border-radius: 3px;
 }
 .btn-confirm:hover{
     cursor: pointer;

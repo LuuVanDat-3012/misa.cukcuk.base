@@ -1,12 +1,15 @@
 /**
   CSS bảng khách hàng
   */
+
 .grid {
   width: 100%;
   position: relative;
   height: 550px;
   overflow-y: auto;
   margin-top: 10px;
+  display: flex;
+  flex-direction: column;
 }
 .grid::-webkit-scrollbar {
   background-color: #d2d2d2;
@@ -15,16 +18,45 @@
 .grid::-webkit-scrollbar-thumb {
   border-top-right-radius: 6px;
 }
-table {
+/* .grid-title{
+  width: 100%;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #bbbbbb;
+}
+.title-text{
+  width: 20%;
+  text-align: center;
+}
+.grid-content{
+  flex: 1;
+}
+
+.row{
+  height: 40px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border-bottom: 1px solid #bbbbbb;
+}
+.row :hover{
+  background-color: rgb(243, 235, 235);
+}
+.content-row{
+  width: 20%;
+  height: 35px;
+  
+} */
+ table {
   width: 100%;
   border-spacing: 0;
-  height: 590px;
+  height: 36.875rem;
   box-sizing: border-box;
 }
-/* tr:nth-child(even) {
-    background-color: #d1f7cf;
-  } */
-tr {
+.contentRow {
   text-align: center;
   max-height: 40px;
   height: 40px;
@@ -48,15 +80,18 @@ td {
   background-color: #ffffff;
   top: 0;
   left: 0;
+  max-height: 40px;
 }
-
+td{
+  overflow: hidden;
+}
 
 
 .loaded {
   animation: fadein 2s;
-  -moz-animation: fadein 2s; /* Firefox */
-  -webkit-animation: fadein 2s; /* Safari and Chrome */
-  -o-animation: fadein 2s; /* Opera */
+  -moz-animation: fadein 2s; 
+  -webkit-animation: fadein 2s; 
+  -o-animation: fadein 2s; 
 }
 .loading{
   position: absolute;
@@ -75,4 +110,8 @@ td {
   position: absolute;
   top:calc(50% - 20px);
   left: calc(50% - 50px);
+} 
+.test{
+  max-height: 40px;
+  height: 40px;
 }

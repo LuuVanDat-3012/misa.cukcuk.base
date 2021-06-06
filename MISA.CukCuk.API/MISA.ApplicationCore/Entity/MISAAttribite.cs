@@ -10,7 +10,11 @@ namespace MISA.ApplicationCore.Entity
     [AttributeUsage(AttributeTargets.Property)]
     public class Required: Attribute
     {
-       
+        public string Msg;
+        public Required(string msg)
+        {
+            this.Msg = msg;
+        }
     }
     /// <summary>
     /// Vượt quá độ dài quy định (20 ký tự)
@@ -49,7 +53,11 @@ namespace MISA.ApplicationCore.Entity
     [AttributeUsage(AttributeTargets.Property)]
     public class ValidateTime : Attribute
     {
-
+        public string Msg;
+        public ValidateTime(string msg)
+        {
+            this.Msg = msg;
+        }
     }
     public class BaseEntity
     {

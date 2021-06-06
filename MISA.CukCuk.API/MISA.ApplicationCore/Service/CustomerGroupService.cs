@@ -8,12 +8,12 @@ namespace MISA.ApplicationCore.Service
 {
     public class CustomerGroupService : BaseService<CustomerGroup>, ICustomerGroupService
     {
-        ICustomerGroupRepository _customerGroupRepository;
+        IBaseRepository<CustomerGroup> _baseRepository;
 
         #region Constructor
-        public CustomerGroupService(ICustomerGroupRepository customerGroupRepository) : base(customerGroupRepository)
+        public CustomerGroupService(IBaseRepository<CustomerGroup> baseRepository) : base(baseRepository)
         {
-            _customerGroupRepository = customerGroupRepository;
+            _baseRepository = baseRepository;
         }
         #endregion
 

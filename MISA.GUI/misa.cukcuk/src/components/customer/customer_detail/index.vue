@@ -3,7 +3,9 @@
     <div class="dialog-model"></div>
     <div class="dialog">
       <div class="dialog-title">
-        <div class="dialog-title-text">THÔNG TIN KHÁCH HÀNG</div>
+        <div class="dialog-title-text">
+          THÔNG TIN KHÁCH HÀNG
+        </div>
         <div class="btn-close-dialog" @click="CloseDialog"></div>
       </div>
       <div class="dialog-content">
@@ -210,7 +212,7 @@
             <button @click="CloseDialog">HUỶ</button>
           </div>
           <div class="btn-save">
-            <button @click="AddCustomer">LƯU</button>
+            <button @click="AddCustomer">{{ StatusMethod }}</button>
           </div>
         </div>
       </div>
@@ -222,7 +224,7 @@ import DatePicker from 'vuejs-datepicker'
 import Combobox from '../combobox/index'
 import moment from 'moment'
 export default {
-  name: 'Dialog',
+  name: 'CustomerDetai',
   components: {
     DatePicker,
     Combobox
@@ -268,26 +270,35 @@ export default {
       title: {
         customerGroupId: '',
         customerGroupName: ''
-      }
+      },
+      vari: ''
+    }
+  },
+  props: {
+    statusMethod: {
+      typeof: String
     }
   },
 
   methods: {
-    customFormatter (date) {
-      return moment(date).format('yyyy-MM-DD')
+    customFormatter (val) {
+      return moment(val, 'yyyy-MM-DD')
     },
     ShowCustomerDetail (val) {
       if (val !== '') {
-        this.axios('Customers/' + val).then(response => {
+        this.axios.get('Customers/' + val).then(response => {
           if (response.data.data != null) {
-            this.infoCustomer = response.data.data
-            this.title.customerGroupId = response.data.data.customerGroupId
-            this.title.customerGroupName = response.data.data.customerGroupName
+            this.infoCustomer = response.data.data[0]
+            this.title.customerGroupId = response.data.data[0].customerGroupId
+            this.title.customerGroupName = response.data.data[0].customerGroupName
           }
         })
       }
     },
     CloseDialog () {
+      this.isWarningName = false
+      this.isWarningCode = false
+      this.isWarningPhone = false
       this.infoCustomer = this.tmp
       this.$refs.combobox.isClick = false
       this.$emit('CloseDialog')
@@ -299,7 +310,9 @@ export default {
     },
 
     ValidateData (val) {
-      if (typeof (val) === 'undefined' || val === null || val === '') { return false }
+      if (typeof val === 'undefined' || val === null || val === '') {
+        return false
+      }
       return true
     },
     ValidateCustomer () {
@@ -319,17 +332,36 @@ export default {
     },
     AddCustomer () {
       if (this.ValidateCustomer()) {
-        this.infoCustomer.birthday = this.customFormatter(
-          this.infoCustomer.birthday
-        )
-        this.axios
-          .post('Customers', this.infoCustomer)
-          .then(response => {
-            this.$vToastify.success(response.data.message)
-          })
-          .catch(exp => {
-            this.$vToastify.error('Đã xảy ra lỗi !!!')
-          })
+        // this.infoCustomer.birthday = this.customFormatter(
+        //   this.infoCustomer.birthday
+        // )
+        console.log(this.infoCustomer.birthday)
+        // nếu method là post sẽ thêm mới khách hàng
+        if (this.statusMethod === 'POST') {
+          this.axios
+            .post('Customers', this.infoCustomer)
+            .then(response => {
+              this.$vToastify.success(response.data.message)
+              this.CloseDialog()
+              this.$emit('ReloadData')
+            })
+            .catch(exp => {
+              this.$vToastify.error('Đã xảy ra lỗi !!!')
+            })
+        } else {
+          // Sửa thông tin khách hàng
+
+          this.axios
+            .put('Customers', this.infoCustomer)
+            .then(response => {
+              this.$vToastify.success(response.data.message)
+              this.CloseDialog()
+              this.$emit('ReloadData')
+            })
+            .catch(exp => {
+              this.$vToastify.error('Đã xảy ra lỗi !!!')
+            })
+        }
       }
     },
     GetCustomerGroup (val) {
@@ -341,6 +373,14 @@ export default {
     this.axios('CustomerGroups').then(response => {
       this.infoCustomer = response.data.data
     })
+  },
+  computed: {
+    StatusMethod () {
+      if (this.statusMethod === 'POST') {
+        return 'LƯU'
+      }
+      return 'SỬA'
+    }
   }
 }
 </script>

@@ -9,7 +9,7 @@ import VueAxios from 'vue-axios'
 const axiosIns = axios.create({
   // You can add your headers here
   // ================================
-  baseURL: 'https://localhost:44333/api/'
+  baseURL: 'https://localhost:44333/v1/api/'
   // timeout: 1000,
   // headers: {'X-Custom-Header': 'foobar'}
 //   headers: user && user.token ? { Authorization: 'Bearer ' + user.token } : {}

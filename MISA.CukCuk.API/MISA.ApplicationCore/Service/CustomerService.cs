@@ -1,21 +1,25 @@
-﻿using MISA.ApplicationCore.Entity;
+﻿using Dapper;
+using MISA.ApplicationCore.Entity;
 using MISA.ApplicationCore.Interface;
 using MISA.ApplicationCore.Service;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Linq;
 using System.Text;
+using System.Transactions;
 
 namespace MISA.ApplicationCore
 {
     public class CustomerService : BaseService<Customer>, ICustomerService
 
     {
-        ICustomerRepository _customerRepository;
+        IBaseRepository<Customer> _baseRepository;
 
         #region Constructor
-        public CustomerService(ICustomerRepository customerRepository) : base(customerRepository)
+        public CustomerService(IBaseRepository<Customer> baseRepository) : base(baseRepository)
         {
-            _customerRepository = customerRepository;
+            _baseRepository = baseRepository;
         }
         public override ActionServiceResult AddEntity(Customer customer)
         {
@@ -25,7 +29,7 @@ namespace MISA.ApplicationCore
             {
                 return new ActionServiceResult()
                 {
-                    Message = "Nhập đúng định dạng !!!",
+                    Message = "Nhập sai định dạng !!!",
                     Success = false,
                     fieldNotValids = fields,
                     data = null,
@@ -37,8 +41,8 @@ namespace MISA.ApplicationCore
                 //validate thông tin
                 var isvalid = true;
                 //validate thông tin
-                var customerduplicate = _customerRepository.GetCustomerByCode(customer.CustomerCode);
-                if (customerduplicate != null)
+                var customerDuplicate = GetCustomerByCode(customer.Fullname);
+                if (customerDuplicate.data != null)
                 {
                     isvalid = false;
                 }
@@ -49,7 +53,7 @@ namespace MISA.ApplicationCore
                 return new ActionServiceResult()
                 {
                     Success = true,
-                    Message = "trùng mã khách hàng",
+                    Message = "Mã khách hàng đã tồn tại !!!",
                     MISAcode = Enumeration.MISAcode.Exception,
                     data = 0
                 };
@@ -58,15 +62,45 @@ namespace MISA.ApplicationCore
 
         }
 
-        public ActionServiceResult DeleteMultiple(Guid[] guids)
+        public ActionServiceResult DeleteMultiple(String[] listId)
         {
-            return new ActionServiceResult()
+            var affectedRows = 0;
+            using (var transaction = new TransactionScope())
             {
-                Success = true,
-                Message = "Thành công !!!",
-                MISAcode = Enumeration.MISAcode.Success,
-                data = _customerRepository.DeleteMultipleCustomer(guids)
-            };
+                foreach (string id in listId)
+                {
+                    var result = this.DeleteEntity(Guid.Parse(id));
+                    affectedRows += (int)result.data;
+                }
+                if (affectedRows == listId.Length)
+                {
+                    transaction.Complete();
+                    return new ActionServiceResult()
+                    {
+                        Success = true,
+                        Message = "Xoá thành công !!!",
+                        MISAcode = Enumeration.MISAcode.Success,
+                        data = affectedRows
+                    };
+                }
+                else
+                {
+                    transaction.Dispose();
+                    return new ActionServiceResult()
+                    {
+                        Success = true,
+                        Message = "Không thành công !!!",
+                        MISAcode = Enumeration.MISAcode.Success,
+                        data = 0
+                    };
+                }
+
+            }
+        }
+
+        public ActionServiceResult GetCustomerByCode(string customerCode)
+        {
+            throw new NotImplementedException();
         }
         #endregion
         #region Method
@@ -77,8 +111,9 @@ namespace MISA.ApplicationCore
 
         public ActionServiceResult GetCustomerByName(string name)
         {
-
-            List<Customer> customers = _customerRepository.GetCustomerByName(name);
+            var param = new DynamicParameters();
+            param.Add("@Fullname", name);
+            var customers = _baseRepository.Get($"Proc_GetCustomerByName", param, commandType: System.Data.CommandType.StoredProcedure);
             return new ActionServiceResult()
             {
                 Success = true,
@@ -92,72 +127,7 @@ namespace MISA.ApplicationCore
         {
             throw new NotImplementedException();
         }
-        //private List<FieldNotValid> ValidateCustomer(Customer customer)
-        //{
-        //    List<FieldNotValid> fieldNotValids = this.BaseValidate(customer);
-        //    if(fieldNotValids.Count != 0)
-        //    return fieldNotValids;
 
-        //}
-        //protected override List<FieldNotValid> BaseValidate(Customer customer)
-        //{
-        //    List<FieldNotValid> fieldNotValids = base.BaseValidate(customer);
-        //    if (fieldNotValids.Count == 0)
-        //    {
-        //        var properties = customer.GetType().GetProperties();
-        //        foreach (var property in properties)
-        //        {
-        //            // Lấy ra property có gán attribute độ dài nhỏ hơn 20
-        //            var propertieRequired = property.GetCustomAttributes(typeof(Length), true);
-        //            if (propertieRequired.Length > 0)
-        //            {
-        //                var value = property.GetValue(customer);
-        //                var propertyTypeName = property.PropertyType.Name;
-        //                var propertyName = property.Name;
-        //                if (propertyTypeName.Equals("String"))
-        //                    if (value.ToString().Length > 20)
-        //                    {
-        //                        fieldNotValids.Add(new FieldNotValid()
-        //                        {
-        //                            fieldName = propertyName,
-        //                            msg =  "Nhập quá 20 ký tự !!!"
-        //                        });
-        //                    }
-        //            }
-        //            //  // Lấy ra property có gán attribute không âm
-        //            var propertyNegative = property.GetCustomAttributes(typeof(NotNegative), true);
-        //            if (propertyNegative.Length > 0)
-        //            {
-        //                var value = property.GetValue(customer);
-        //                var propertyTypeName = property.PropertyType.Name;
-        //                var propertyName = property.Name;
-        //                if((int)value < 0)
-        //                    fieldNotValids.Add(new FieldNotValid()
-        //                    {
-        //                        fieldName = propertyName,
-        //                        msg = "Giá trị không được âm !!! : "
-        //                    });
-        //            }
-        //            //  Lấy ra property có gán attribute không âm
-        //            var propertyTime = property.GetCustomAttributes(typeof(ValidateTime), true);
-        //            if (propertyTime.Length > 0)
-        //            {
-        //                var value = property.GetValue(customer);
-        //                var propertyName = property.Name;
-        //                var startDate = new DateTime(2001, 01, 01, 0, 0, 0);
-        //                var endDate = new DateTime(2021, 01, 01, 0, 0, 0);
-        //                if((DateTime)value < startDate || (DateTime)value > endDate)
-        //                    fieldNotValids.Add(new FieldNotValid()
-        //                    {
-        //                        fieldName = propertyName,
-        //                        msg = "Giá trị ngày tháng không nằm trong khoảng giới hạn !!! : "
-        //                    });
-        //            }
-        //        }
-        //    }
-        //    return fieldNotValids;
-
-        //}
 
         #endregion
     }

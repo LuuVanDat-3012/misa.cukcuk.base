@@ -12,7 +12,7 @@
         @click="GetCustomerGroup(item.id, item.customerGroupName)"
       >
         <div class="content-icon-default"></div>
-        <div class="content-text">{{ item.customerGroupName }}</div>
+        <div class="cbb-content-text">{{ item.customerGroupName }}</div>
       </div>
     </div>
   </div>
@@ -33,9 +33,6 @@ export default {
   },
   methods: {
     GetCustomerGroup (id, name) {
-      console.log(this.title.customerGroupId)
-      this.title.customerGroupId = id
-      console.log(this.title.customerGroupId)
       this.title.customerGroupName = name
       this.$emit('GetCustomerGroup', this.title.customerGroupId)
       this.isClick = false

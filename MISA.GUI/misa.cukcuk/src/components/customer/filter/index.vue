@@ -9,14 +9,13 @@
       </div>
       <div class="filter-customer-group">
       </div>
-      <div class="btn-delete" >
+      <div class="btn-delete" @click="DeleteCustomers">
         <p>Xoá</p>
       </div>
-      <div class="btn-refresh">
+      <div class="btn-refresh" @click="ReloadData">
         <div class="btn-refresh-icon"></div>
       </div>
     </div>
-
 </div>
 </template>
 
@@ -36,8 +35,37 @@ export default {
     GetCustomerByName (val) {
       val = this.customerName
       this.$emit('GetCustomerByName', val)
+    },
+    DeleteCustomers () {
+      this.$emit('DeleteCustomers')
+    },
+    ReloadData () {
+      this.$emit('ReloadData')
+    },
+    removeAccents (str) {
+      var AccentsMap = [
+        'aàảãáạăằẳẵắặâầẩẫấậ',
+        'AÀẢÃÁẠĂẰẲẴẮẶÂẦẨẪẤẬ',
+        'dđ',
+        'DĐ',
+        'eèẻẽéẹêềểễếệ',
+        'EÈẺẼÉẸÊỀỂỄẾỆ',
+        'iìỉĩíị',
+        'IÌỈĨÍỊ',
+        'oòỏõóọôồổỗốộơờởỡớợ',
+        'OÒỎÕÓỌÔỒỔỖỐỘƠỜỞỠỚỢ',
+        'uùủũúụưừửữứự',
+        'UÙỦŨÚỤƯỪỬỮỨỰ',
+        'yỳỷỹýỵ',
+        'YỲỶỸÝỴ'
+      ]
+      for (var i = 0; i < AccentsMap.length; i++) {
+        var re = new RegExp('[' + AccentsMap[i].substr(1) + ']', 'g')
+        var char = AccentsMap[i][0]
+        str = str.replace(re, char)
+      }
+      return str
     }
-
   }
 
 }

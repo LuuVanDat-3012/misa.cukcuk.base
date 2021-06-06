@@ -1,7 +1,9 @@
-﻿using MISA.ApplicationCore.Entity;
+﻿using Dapper;
+using MISA.ApplicationCore.Entity;
 using MISA.ApplicationCore.Interface;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Text;
 
 namespace MISA.ApplicationCore.Service
@@ -9,16 +11,20 @@ namespace MISA.ApplicationCore.Service
     public class BaseService<TEntity> : IBaseService<TEntity>
     {
         IBaseRepository<TEntity> _baseRepository;
+        string _tableName;
         #region Constructor
         public BaseService(IBaseRepository<TEntity> baseRepository)
         {
             _baseRepository = baseRepository;
+            _tableName = typeof(TEntity).Name;
         }
         #endregion
         public virtual ActionServiceResult AddEntity(TEntity entity)
         {
             ActionServiceResult actionServiceResult = new ActionServiceResult();
-            var isValidate = BaseValidate(entity);
+            var isValidate = this.BaseValidate(entity);
+            var param = this.MappingDataType(entity);
+
             if (isValidate.Count == 0)
             {
                 return new ActionServiceResult()
@@ -26,7 +32,7 @@ namespace MISA.ApplicationCore.Service
                     Message = "Thêm thành công",
                     Success = true,
                     MISAcode = Enumeration.MISAcode.Success,
-                    data = _baseRepository.AddEntity(entity)
+                    data = _baseRepository.ExecuteNonQuery($"Proc_Add{_tableName}", param, commandType: CommandType.StoredProcedure)
                 };
             }
             return new ActionServiceResult()
@@ -36,35 +42,48 @@ namespace MISA.ApplicationCore.Service
                 MISAcode = Enumeration.MISAcode.Validate,
                 fieldNotValids = isValidate,
                 data = null
-                
             };
         }
 
         public ActionServiceResult DeleteEntity(Guid entityId)
         {
+            var param = new DynamicParameters();
+            param.Add("@customerId", entityId.ToString());
+
             return new ActionServiceResult()
             {
                 Message = "Xoá thành công",
                 Success = true,
                 MISAcode = Enumeration.MISAcode.Success,
-                data = _baseRepository.DeleteEntity(entityId)
+                data = _baseRepository.ExecuteNonQuery($"Proc_Delete{_tableName}", param, commandType: CommandType.StoredProcedure)
             };
         }
 
-        public ActionServiceResult GetEntities()
+
+
+        public ActionServiceResult GetEntities(int page, string propertySearch)
         {
+            if(propertySearch == null || propertySearch == string.Empty)
+            {
+                propertySearch = "";
+            }
+            var param = new DynamicParameters();
+            param.Add("@page", page*50);
+            param.Add("@propertySearch", propertySearch);
             return new ActionServiceResult()
             {
                 Message = "Thành công",
                 Success = true,
                 MISAcode = Enumeration.MISAcode.Success,
-                data = _baseRepository.GetEntities()
+                data = _baseRepository.Get($"Proc_Get{_tableName}", param, commandType: CommandType.StoredProcedure)
             };
         }
 
         public ActionServiceResult GetEntityById(Guid entityId)
         {
-            var entity = _baseRepository.GetEntityById(entityId);
+            var param = new DynamicParameters();
+            param.Add("@Id", entityId.ToString());
+            var entity = _baseRepository.Get($"Proc_Get{_tableName}ById", param, commandType: CommandType.StoredProcedure);
             if (entity != null)
             {
                 return new ActionServiceResult()
@@ -87,14 +106,20 @@ namespace MISA.ApplicationCore.Service
             }
         }
 
+        public ActionServiceResult PagingEntity(string entityInfo)
+        {
+            throw new NotImplementedException();
+        }
+
         public ActionServiceResult UpdateEntity(TEntity entity)
         {
+            var param = this.MappingDataType(entity);
             return new ActionServiceResult()
             {
                 Success = true,
                 Message = "Thành công",
                 MISAcode = Enumeration.MISAcode.Success,
-                data = _baseRepository.UpdateEntity(entity)
+                data = _baseRepository.ExecuteNonQuery($"Proc_Update{_tableName}", param, CommandType.StoredProcedure)
             };
 
         }
@@ -103,7 +128,7 @@ namespace MISA.ApplicationCore.Service
         /// </summary>
         /// <param name="entity">Đối tượng validate</param>
         /// <returns>! danh sách các property không chính xác</returns>
-        protected virtual List<FieldNotValid> BaseValidate(TEntity entity)
+        protected List<FieldNotValid> BaseValidate(TEntity entity)
         {
             List<string> msg = new List<string>();
             List<FieldNotValid> fieldNotValids = new List<FieldNotValid>();
@@ -112,9 +137,10 @@ namespace MISA.ApplicationCore.Service
             foreach (var property in properties)
             {
                 // Validate property bắt buộc nhập
-                var propertieRequired = property.GetCustomAttributes(typeof(Required), true);
-                if (propertieRequired.Length > 0)
+                var propertyRequired = property.GetCustomAttributes(typeof(Required), true);
+                if (propertyRequired.Length > 0)
                 {
+                    var message = (propertyRequired[0] as Required).Msg;
                     var value = property.GetValue(entity);
                     var propertyTypeName = property.PropertyType.Name;
                     var propertyName = property.Name;
@@ -124,7 +150,7 @@ namespace MISA.ApplicationCore.Service
                             fieldNotValids.Add(new FieldNotValid()
                             {
                                 fieldName = propertyName,
-                                msg = "Không được để trống"
+                                msg = message
                             });
                         }
 
@@ -136,7 +162,7 @@ namespace MISA.ApplicationCore.Service
                             fieldNotValids.Add(new FieldNotValid()
                             {
                                 fieldName = propertyName,
-                                msg = "Không được để trống"
+                                msg = message
                             });
 
                         }
@@ -144,7 +170,7 @@ namespace MISA.ApplicationCore.Service
                 }
 
                 // Validate property theo độ dài
-                var propertieLength= property.GetCustomAttributes(typeof(Length), true);
+                var propertieLength = property.GetCustomAttributes(typeof(Length), true);
                 if (propertieLength.Length > 0)
                 {
                     var message = (propertieLength[0] as Length).Msg;
@@ -158,7 +184,7 @@ namespace MISA.ApplicationCore.Service
                             fieldNotValids.Add(new FieldNotValid()
                             {
                                 fieldName = propertyName,
-                                msg = message + " không vượt quá "+ maxLength + " ký tự !!!"
+                                msg = message + " không vượt quá " + maxLength + " ký tự !!!"
                             });
                         }
                 }
@@ -166,10 +192,27 @@ namespace MISA.ApplicationCore.Service
                 var propertyNegative = property.GetCustomAttributes(typeof(NotNegative), true);
                 if (propertyNegative.Length > 0)
                 {
+                    var propertyType = property.PropertyType;
                     var value = property.GetValue(entity);
                     var message = (propertyNegative[0] as NotNegative).Msg;
                     var propertyName = property.Name;
-                    if ((int)value < 0)
+                    if ((int)value < 0 || (int)value > 2)
+                        fieldNotValids.Add(new FieldNotValid()
+                        {
+                            fieldName = propertyName,
+                            msg = message 
+                        });
+                }
+                //Validate ngày tháng năm
+                var propertyTime = property.GetCustomAttributes(typeof(ValidateTime), true);
+                if (propertyTime.Length > 0)
+                {
+                    var value = property.GetValue(entity);
+                    var message = (propertyTime[0] as ValidateTime).Msg;
+                    var propertyName = property.Name;
+                    var startDate = new DateTime(2001, 01, 01, 0, 0, 0);
+                    var endDate = new DateTime(2021, 01, 01, 0, 0, 0);
+                    if ((DateTime)value < startDate || (DateTime)value > endDate)
                         fieldNotValids.Add(new FieldNotValid()
                         {
                             fieldName = propertyName,
@@ -180,5 +223,56 @@ namespace MISA.ApplicationCore.Service
             return fieldNotValids;
         }
 
+        public DynamicParameters MappingDataType<Tentity>(Tentity entity)
+        {
+            var properties = entity.GetType().GetProperties();
+            var param = new DynamicParameters();
+            foreach (var property in properties)
+            {
+                var propertyname = property.Name;
+                var propertyvalue = property.GetValue(entity);
+                var propertytype = property.PropertyType;
+                if (propertytype == typeof(Guid) || propertytype == typeof(Guid?))
+                {
+                    param.Add($"@{propertyname}", propertyvalue, DbType.String);
+                }
+                else
+                {
+                    param.Add($"@{propertyname}", propertyvalue);
+                }
+            }
+            return param;
+        }
+
+        public ActionServiceResult DeeteMultiple(Guid[] guids)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// LVDat

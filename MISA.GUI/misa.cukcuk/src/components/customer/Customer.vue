@@ -1,13 +1,30 @@
 <template>
   <div>
-    <Header @ShowDialog='ShowDialog' />
-    <FilterCustomer @GetCustomerByName='GetCustomerByName'/>
-    <Grid @ShowCustomerDetail='ShowCustomerDetail' ref='grid'/>
-    <CustomerDetail v-show="isShowed" @CloseDialog='CloseDialog' ref="DetailCustomer"/>
-    <PopupDetele v-if="false" />
+    <Header @ShowDialog="ShowDialog" />
+    <FilterCustomer
+      @GetCustomerByName="GetCustomerByName"
+      @DeleteCustomers="DeleteCustomers"
+      @ReloadData='ReloadData'
+    />
+    <Grid @ShowCustomerDetail="ShowCustomerDetail" ref="grid" />
+    <CustomerDetail
+      v-show="isShowed"
+      @CloseDialog="CloseDialog"
+      ref="DetailCustomer"
+      :statusMethod='this.statusMethod'
+       @ReloadData="ReloadData"
+    />
+    <PopupDetele
+      v-show="isShowPopup"
+      @ClosePopup="isShowPopup = false"
+      :listIdDeleted="this.listIdDeleted"
+      @ReloadData="ReloadData"
+    />
+    <MISANavigate />
   </div>
 </template>
 <script>
+import MISANavigate from './navigate/index.vue'
 import Header from './header/index.vue'
 import FilterCustomer from './filter/index.vue'
 import Grid from './grid/index.vue'
@@ -20,49 +37,57 @@ export default {
     FilterCustomer,
     Grid,
     CustomerDetail,
-    PopupDetele
+    PopupDetele,
+    MISANavigate
   },
-  setup () {
-
-  },
+  setup () {},
   data () {
     return {
+      // Hiện thị customerdetai
       isShowed: false,
-      tmp: {
-        id: '',
-        customerCode: '',
-        fullname: '',
-        gender: 1,
-        birthday: '2000-12-30T00:00:00',
-        phone: '',
-        email: '',
-        memberCardCode: '',
-        taxCode: '',
-        address: '',
-        company: '',
-        customerGroupName: 'Thường',
-        customerGroupId: ''
-      }
+      // Biến hiện thị popup delete
+      isShowPopup: false,
+      // Khởi tạo 1 khách hàng rỗng
+      // Danh sách id cần xoá
+      listIdDeleted: [],
+      statusMethod: ''
     }
   },
   methods: {
+    // Hiển thị customer detail - thêm mới
     ShowDialog () {
       this.isShowed = true
+      this.statusMethod = 'POST'
     },
+    // Hiện thị customer detail - sửa
     ShowCustomerDetail (val) {
+      this.statusMethod = 'PUT'
       this.isShowed = true
       this.$refs.DetailCustomer.ShowCustomerDetail(val)
     },
+    // Đóng customer detail
     CloseDialog () {
       this.isShowed = false
     },
+    // Gọi hàm hiển thị customer và truyền tên cần tìm
     GetCustomerByName (val) {
       this.$refs.grid.ShowCustomers(val)
+    },
+    DeleteCustomers () {
+      this.listIdDeleted = this.$refs.grid.listIdDeleted
+      if (this.listIdDeleted.length === 0) {
+        this.$vToastify.warning('Vui lòng chọn các khách hàng muốn xoá !!!')
+      } else {
+        this.isShowPopup = true
+      }
+    },
+    // Tải lại dữ lieeujf
+    ReloadData () {
+      this.listIdDeleted = []
+      this.$refs.grid.listIdDeleted = []
+      this.$refs.grid.LoadData()
     }
-
   }
 }
-
 </script>
-<style>
-</style>
+<style></style>

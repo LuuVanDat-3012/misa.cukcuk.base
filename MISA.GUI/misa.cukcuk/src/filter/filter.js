@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import moment from 'moment'
 
-Vue.filter('formatDate', (val) => moment(String(val)).format('DD/MM/YYYY'))
+Vue.filter('formatDate', (val) => moment(val).format('DD/MM/YYYY'))
 
 Vue.filter('formatGender', (val) => {
   if (val === 0) return 'Nam'

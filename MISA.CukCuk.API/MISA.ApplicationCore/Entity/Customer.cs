@@ -20,7 +20,7 @@ namespace MISA.ApplicationCore.Entity
         /// Mã khách hàng
         /// </summary>
         [CheckDuplicate]
-        [Required]
+        [Required("Mã khách hàng không được để trống")]
         [Length("Mã khách hàng", 20)]
         public string CustomerCode { get; set; }
         /// <summary>
@@ -30,14 +30,14 @@ namespace MISA.ApplicationCore.Entity
         /// <summary>
         /// Giới tinh 0-nữ, 1-nam, 2-khác
         /// </summary>
-        [Required]
-        [NotNegative("Giới tính không âm")]
-        public int Gender { get; set; }
+        [Required("Giới tính không được để trống")]
+        [NotNegative("Giới tính chỉ nhận 3 giá trị 0, 1, 2")]
+        public int? Gender { get; set; }
         /// <summary>
         /// Ngày sinh
         /// </summary>
-        [Required]
-        [ValidateTime]
+        [Required("Ngày sinh không để trống")]
+        [ValidateTime("Ngày sinh không nằm trong khoảng giá trị cho phép (01/01/2001 - 01/01/2021)")]
         public DateTime Birthday { get; set; }
         /// <summary>
         /// Số điện thoại

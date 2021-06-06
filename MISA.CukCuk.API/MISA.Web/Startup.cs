@@ -30,9 +30,7 @@ namespace MISA.service
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<ICustomerService, CustomerService>();
-            services.AddScoped<ICustomerGroupRepository, CustomerGroupRepository>();
             services.AddScoped<ICustomerGroupService, CustomerGroupService>();
             services.AddScoped(typeof(IBaseService<>), typeof(BaseService<>));
             services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
