@@ -1,5 +1,89 @@
 .MISAnavigate{
     width: 100%;
-    height: 100px;
-    background-color: aqua;
+    height: 70px;
+    display: flex;
+    box-sizing: border-box;
+}
+.total-employee{
+    position: absolute;
+    width: 30%;
+    left: 24px;
+    padding-top: 10px;
+    font-family: MISA-Bold;
+}
+.list-page-number{
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+.page{
+    display: flex;
+    justify-content: center;
+}
+.page-number{
+    width: 24px;
+    height: 24px;
+    border: 1px solid #bbbbbb;
+    border-radius: 50%;
+    font-size: 15px;
+    line-height: 24px;
+    text-align: center;
+    margin: 10px 5px 0px 5px;
+    box-sizing: border-box;
+}
+.page-number:hover{
+    border: 0;
+    background-color: #bbbbbb;
+    cursor: pointer;
+}
+
+.btn-prev-page{
+    width: 24px;
+    height: 24px;
+    background-image: url('../../../assets/icon/btn-prev-page.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.btn-firstpage{
+    width: 24px;
+    height: 24px;
+    background-image: url('../../../assets/icon/btn-firstpage.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.btn-next-page{
+    width: 24px;
+    height: 24px;
+    background-image: url('../../../assets/icon/btn-next-page.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.btn-lastpage{
+    width: 24px;
+    height: 24px;
+    background-image: url('../../../assets/icon/btn-lastpage.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.navigate-page{
+    margin: 10px 5px 0px 5px;
+    border-radius: 50%;
+}
+.navigate-page:hover{
+    background-color: #bbbbbb;
+    cursor: pointer;
+}
+
+
+.employees-in-page{
+    position: absolute;
+    right: 24px;
+    width: 30%;
+    text-align: right;
+    padding-top: 10px;
+    font-family: MISA-Bold;
+}
+
+.isSelected{
+    background-color: #019160;
 }

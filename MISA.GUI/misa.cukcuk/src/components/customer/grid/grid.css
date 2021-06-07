@@ -5,7 +5,7 @@
 .grid {
   width: 100%;
   position: relative;
-  height: 550px;
+  height: 680px;
   overflow-y: auto;
   margin-top: 10px;
   display: flex;

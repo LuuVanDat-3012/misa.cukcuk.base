@@ -5,8 +5,9 @@
       @GetCustomerByName="GetCustomerByName"
       @DeleteCustomers="DeleteCustomers"
       @ReloadData='ReloadData'
+      ref=""
     />
-    <Grid @ShowCustomerDetail="ShowCustomerDetail" ref="grid" />
+    <Grid @ShowCustomerDetail="ShowCustomerDetail" ref="grid" @GetTotalPage="GetTotalPage"/>
     <CustomerDetail
       v-show="isShowed"
       @CloseDialog="CloseDialog"
@@ -20,7 +21,7 @@
       :listIdDeleted="this.listIdDeleted"
       @ReloadData="ReloadData"
     />
-    <MISANavigate />
+    <MISANavigate ref="MISANavigate" />
   </div>
 </template>
 <script>
@@ -72,6 +73,7 @@ export default {
     // Gọi hàm hiển thị customer và truyền tên cần tìm
     GetCustomerByName (val) {
       this.$refs.grid.ShowCustomers(val)
+      // Truyền số trangcho navigate
     },
     DeleteCustomers () {
       this.listIdDeleted = this.$refs.grid.listIdDeleted
@@ -81,11 +83,15 @@ export default {
         this.isShowPopup = true
       }
     },
-    // Tải lại dữ lieeujf
+    // Tải lại dữ liệu
     ReloadData () {
       this.listIdDeleted = []
       this.$refs.grid.listIdDeleted = []
       this.$refs.grid.LoadData()
+    },
+    GetTotalPage (totalPage, currentPage) {
+      this.$refs.MISANavigate.totalPage = totalPage
+      this.$refs.MISANavigate.currentPage = currentPage
     }
   }
 }

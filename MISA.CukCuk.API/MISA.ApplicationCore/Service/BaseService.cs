@@ -11,7 +11,7 @@ namespace MISA.ApplicationCore.Service
     public class BaseService<TEntity> : IBaseService<TEntity>
     {
         IBaseRepository<TEntity> _baseRepository;
-        string _tableName;
+        protected string _tableName;
         #region Constructor
         public BaseService(IBaseRepository<TEntity> baseRepository)
         {
@@ -61,14 +61,11 @@ namespace MISA.ApplicationCore.Service
 
 
 
-        public ActionServiceResult GetEntities(int page, string propertySearch)
+        public virtual ActionServiceResult GetEntities(int page, string propertySearch)
         {
-            if(propertySearch == null || propertySearch == string.Empty)
-            {
-                propertySearch = "";
-            }
+           
             var param = new DynamicParameters();
-            param.Add("@page", page*50);
+            param.Add("@page", page*30);
             param.Add("@propertySearch", propertySearch);
             return new ActionServiceResult()
             {

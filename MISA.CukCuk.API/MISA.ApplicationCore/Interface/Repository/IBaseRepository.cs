@@ -66,5 +66,14 @@ namespace MISA.ApplicationCore.Interface
         /// <returns>Số dòng bị ảnh hưởng</returns>
         /// CreatedBy: LVDat (03/06/2021)
         int ExecuteNonQuery(string sqlCommand, DynamicParameters param, CommandType commandType);
+        /// <summary>
+        /// Hàm thực hiện lấy ra tổng số bản ghi
+        /// </summary>
+        /// <param name="sqlCommand">Câu lệnh hoặc Proc</param>
+        /// <param name="param">Tham số</param>
+        /// <param name="commandType">Kiểu command</param>
+        /// <returns> Số bản ghi</returns>
+        /// CreateBy: LVDat (07/06/2021)
+        int GetQuality(string sqlCommand, DynamicParameters param, CommandType commandType);
     }
 }

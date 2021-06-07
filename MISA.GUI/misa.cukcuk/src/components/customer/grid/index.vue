@@ -73,8 +73,9 @@ export default {
     },
     // Danh sách khách hàng theo tên
     ShowCustomers (val) {
-      this.axios.get('Customers/search/' + val).then(response => {
+      this.axios.get('Customers?propertySearch=' + val).then(response => {
         this.listCustomer = response.data.data
+        this.$emit('GetTotalPage', response.data.totalPage, response.data.page)
       })
     },
     LoadData () {
@@ -94,6 +95,8 @@ export default {
     this.axios.get('Customers').then(response => {
       this.listCustomer = response.data.data
       this.isLoading = false
+      // Lấy tổng số trang
+      this.$emit('GetTotalPage', response.data.totalPage)
     })
   }
 }

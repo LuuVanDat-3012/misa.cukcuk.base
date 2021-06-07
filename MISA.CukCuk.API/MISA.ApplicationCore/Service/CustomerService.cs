@@ -122,6 +122,32 @@ namespace MISA.ApplicationCore
                 data = customers
             };
         }
+        public override ActionServiceResult GetEntities(int page, string propertySearch)
+        {
+            if (propertySearch == null || propertySearch == string.Empty)
+            {
+                propertySearch = "";
+            }
+            // Lấy ra số lượng bản ghi
+            var paramQuality = new DynamicParameters();
+            paramQuality.Add("@value", propertySearch);
+            var quality = _baseRepository.GetQuality($"Proc_GetQuality{_tableName}", paramQuality, commandType: CommandType.StoredProcedure);
+            // Lấy ra số trang
+            var totalPage = Math.Ceiling(Convert.ToDouble(quality) / 30);
+            var param = new DynamicParameters();
+            param.Add("@page", page * 30);
+            param.Add("@valueSearch", propertySearch);
+            return new ActionServiceResult()
+            {
+                Message = "Lấy dữ liệu thành công",
+                Success = true,
+                MISAcode = Enumeration.MISAcode.Success,
+                TotalPage = totalPage,
+                PageNum = page,
+                data = _baseRepository.Get($"Get_CustomerPaging", param, commandType: CommandType.StoredProcedure)
+            };
+            return base.GetEntities(page, propertySearch);
+        }
 
         public ActionServiceResult GetCustomerPaging(int limit, int offser)
         {

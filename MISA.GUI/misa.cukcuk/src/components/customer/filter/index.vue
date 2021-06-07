@@ -32,9 +32,10 @@ export default {
     }
   },
   methods: {
-    GetCustomerByName (val) {
+    GetCustomerByName (val, page) {
+      page = 1
       val = this.customerName
-      this.$emit('GetCustomerByName', val)
+      this.$emit('GetCustomerByName', val, page)
     },
     DeleteCustomers () {
       this.$emit('DeleteCustomers')
