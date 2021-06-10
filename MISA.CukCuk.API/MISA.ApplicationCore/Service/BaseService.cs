@@ -4,7 +4,7 @@ using MISA.ApplicationCore.Interface;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Text;
+using static MISA.ApplicationCore.Entity.Enumeration;
 
 namespace MISA.ApplicationCore.Service
 {
@@ -27,21 +27,22 @@ namespace MISA.ApplicationCore.Service
 
             if (isValidate.Count == 0)
             {
+                var result = _baseRepository.ExecuteNonQuery($"Proc_Add{_tableName}", param, commandType: CommandType.StoredProcedure);
                 return new ActionServiceResult()
                 {
-                    Message = "Thêm thành công",
                     Success = true,
-                    MISAcode = Enumeration.MISAcode.Success,
-                    data = _baseRepository.ExecuteNonQuery($"Proc_Add{_tableName}", param, commandType: CommandType.StoredProcedure)
+                    MISAcode = MISAcode.Success,
+                    Message = "Thêm mới thành công !!!",
+                    data = result
                 };
             }
             return new ActionServiceResult()
             {
-                Message = "Không được để trống",
-                Success = true,
-                MISAcode = Enumeration.MISAcode.Validate,
-                fieldNotValids = isValidate,
-                data = null
+                Success = false,
+                MISAcode = MISAcode.Validate,
+                Message = "Thêm mới không thành công !!!",
+                FieldNotValids = isValidate,
+                data = -1
             };
         }
 
@@ -49,30 +50,41 @@ namespace MISA.ApplicationCore.Service
         {
             var param = new DynamicParameters();
             param.Add("@customerId", entityId.ToString());
-
+            var result = _baseRepository.ExecuteNonQuery($"Proc_Delete{_tableName}", param, commandType: CommandType.StoredProcedure);
+            if (result == 0)
+            {
+                return new ActionServiceResult()
+                {
+                    Success = false,
+                    MISAcode = MISAcode.Validate,
+                    Message = "Không tìm thấy  bản ghi cần xoá !!!",
+                    data = 0
+                };
+            }
             return new ActionServiceResult()
             {
-                Message = "Xoá thành công",
                 Success = true,
-                MISAcode = Enumeration.MISAcode.Success,
-                data = _baseRepository.ExecuteNonQuery($"Proc_Delete{_tableName}", param, commandType: CommandType.StoredProcedure)
+                MISAcode = MISAcode.Validate,
+                Message = "Xoá thành công !!!",
+                data = result
             };
         }
 
 
 
-        public virtual ActionServiceResult GetEntities(int page, string propertySearch)
+        public virtual ActionServiceResult GetEntities(int pageIndex, int pageSize, string filter)
         {
-           
+
             var param = new DynamicParameters();
-            param.Add("@page", page*30);
-            param.Add("@propertySearch", propertySearch);
+            param.Add("@PageIndex", pageIndex);
+            param.Add("@PageSize", pageSize);
+            param.Add("@Filter", filter);
             return new ActionServiceResult()
             {
                 Message = "Thành công",
                 Success = true,
                 MISAcode = Enumeration.MISAcode.Success,
-                data = _baseRepository.Get($"Proc_Get{_tableName}", param, commandType: CommandType.StoredProcedure)
+                data = _baseRepository.Get($"Proc_Get{_tableName}Paging", param, commandType: CommandType.StoredProcedure)
             };
         }
 
@@ -103,22 +115,30 @@ namespace MISA.ApplicationCore.Service
             }
         }
 
-        public ActionServiceResult PagingEntity(string entityInfo)
-        {
-            throw new NotImplementedException();
-        }
 
-        public ActionServiceResult UpdateEntity(TEntity entity)
+        public virtual ActionServiceResult UpdateEntity(TEntity entity)
         {
             var param = this.MappingDataType(entity);
+            var isValid = BaseValidate(entity);
+            if (isValid.Count == 0)
+            { 
+                var result = _baseRepository.ExecuteNonQuery($"Proc_Update{_tableName}", param, CommandType.StoredProcedure);
+                return new ActionServiceResult()
+                {
+                    Message = "Cập nhật bản ghi thành công !!!",
+                    Success = true,
+                    MISAcode = Enumeration.MISAcode.Success,
+                    data = result
+                };
+            }
             return new ActionServiceResult()
             {
-                Success = true,
-                Message = "Thành công",
-                MISAcode = Enumeration.MISAcode.Success,
-                data = _baseRepository.ExecuteNonQuery($"Proc_Update{_tableName}", param, CommandType.StoredProcedure)
+                Message = "Cập nhật bản ghi không  thành công !!!",
+                Success = false,
+                MISAcode = Enumeration.MISAcode.Validate,
+                FieldNotValids = isValid,
+                data = null
             };
-
         }
         /// <summary>
         /// Validate dữ liệu
@@ -197,7 +217,7 @@ namespace MISA.ApplicationCore.Service
                         fieldNotValids.Add(new FieldNotValid()
                         {
                             fieldName = propertyName,
-                            msg = message 
+                            msg = message
                         });
                 }
                 //Validate ngày tháng năm
@@ -241,9 +261,47 @@ namespace MISA.ApplicationCore.Service
             return param;
         }
 
-        public ActionServiceResult DeeteMultiple(Guid[] guids)
+
+        public ActionServiceResult SaveData(List<TEntity> entities)
         {
-            throw new NotImplementedException();
+            if (entities?.Count > 0)
+            {
+                PreSave(entities);
+                foreach (var entity in entities)
+                {
+                    var oEditMode = entity.GetType().GetProperty("EditMode").GetValue(entity);
+                    var editMode = Convert.ToInt32(oEditMode);
+                    if (editMode == (int)EditMode.Add)
+                    {
+                        return AddEntity(entity);
+                    }
+                    else if (editMode == (int)EditMode.Delete)
+                    {
+                        List<String> li
+                        return DeleteEntity(Guid.Parse((string)entity.GetType().GetProperty("EditMode").GetValue(entity)));
+                    }
+                    else if (editMode == (int)EditMode.Edit)
+                    {
+                        return UpdateEntity(entity);
+                    }
+                }
+            }
+            return new ActionServiceResult()
+            {
+
+            };
+        }
+        public bool GetData(int pageIndex, int pageSize, string filter)
+        {
+            return true;
+        }
+        /// <summary>
+        /// Hàm custom trước khi save
+        /// </summary>
+        /// <param name=""></param>
+        public virtual void PreSave(List<TEntity> entities)
+        {
+
         }
     }
 }

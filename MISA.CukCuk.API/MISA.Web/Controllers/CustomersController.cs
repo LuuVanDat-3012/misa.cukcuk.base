@@ -15,25 +15,6 @@ namespace MISA.Web.Controllers
         {
             _customerService = customerService;
         }
-        /// <summary>
-        /// Tìm kiếm theo tên khách hàng
-        /// </summary>
-        /// <param name="name">Tên khách hàng</param>
-        /// <returns>Danh sách khách hàng</returns>
-        /// CreatedBy: LVDat (30/05/2021)
-        [HttpGet("search/{name}")]
-        public IActionResult GetCustomersByName(string name)
-        {
-            var result = _customerService.GetCustomerByName(name);
-            return Ok(result);
-        }
-        [HttpPost("multiple")]
-        public IActionResult DeleteMultiple([FromBody] String[] recordData)
-        {
-            var tmp = recordData;
-            var result = _customerService.DeleteMultiple(recordData);
-            return Ok(result);
-        }
     }
     
 

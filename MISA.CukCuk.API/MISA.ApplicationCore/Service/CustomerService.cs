@@ -21,6 +21,14 @@ namespace MISA.ApplicationCore
         {
             _baseRepository = baseRepository;
         }
+        /// <summary>
+        /// Hàm thêm mới khách hàng vào csdl
+        /// -1 lỗi validate
+        /// -2 trùng mã
+        ///  1 thành công
+        /// </summary>
+        /// <param name="customer">Thông tin thêm mới</param>
+        /// <returns></returns>
         public override ActionServiceResult AddEntity(Customer customer)
         {
 
@@ -29,11 +37,11 @@ namespace MISA.ApplicationCore
             {
                 return new ActionServiceResult()
                 {
-                    Message = "Nhập sai định dạng !!!",
                     Success = false,
-                    fieldNotValids = fields,
-                    data = null,
-                    MISAcode = Enumeration.MISAcode.Validate
+                    MISAcode = Enumeration.MISAcode.Validate,
+                    Message = "Không đúng định dạng !!",
+                    FieldNotValids = fields,
+                    data = -1
                 };
             }
             else
@@ -41,25 +49,42 @@ namespace MISA.ApplicationCore
                 //validate thông tin
                 var isvalid = true;
                 //validate thông tin
-                var customerDuplicate = GetCustomerByCode(customer.Fullname);
-                if (customerDuplicate.data != null)
+                var customerDuplicate = GetCustomerByCode(customer.CustomerCode);
+                if (customerDuplicate != null)
                 {
-                    isvalid = false;
+                    return new ActionServiceResult()
+                    {
+                        Success = false,
+                        MISAcode = Enumeration.MISAcode.Validate,
+                        Message = "Mã khách hàng đã tồn tại !!!",
+                        data = -1
+                    };
                 }
-                if (isvalid == true)
-                {
+                else { 
                     return base.AddEntity(customer);
                 }
+            }
+        }
+
+
+        public override ActionServiceResult UpdateEntity(Customer customer)
+        {
+            var customerDuplicate = GetCustomerByCode(customer.CustomerCode);
+            if(customerDuplicate == null)
+            {
+                return base.UpdateEntity(customer);
+            }
+            else
+            {
                 return new ActionServiceResult()
                 {
-                    Success = true,
+                    Success = false,
+                    MISAcode = Enumeration.MISAcode.Validate,
                     Message = "Mã khách hàng đã tồn tại !!!",
-                    MISAcode = Enumeration.MISAcode.Exception,
-                    data = 0
+                    data = -1
                 };
             }
-
-
+            
         }
 
         public ActionServiceResult DeleteMultiple(String[] listId)
@@ -98,61 +123,47 @@ namespace MISA.ApplicationCore
             }
         }
 
-        public ActionServiceResult GetCustomerByCode(string customerCode)
-        {
-            throw new NotImplementedException();
-        }
-        #endregion
-        #region Method
-        public ActionServiceResult GetCustomerByCustomerGroup(Guid groupId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ActionServiceResult GetCustomerByName(string name)
+        public Customer GetCustomerByCode(string customerCode)
         {
             var param = new DynamicParameters();
-            param.Add("@Fullname", name);
-            var customers = _baseRepository.Get($"Proc_GetCustomerByName", param, commandType: System.Data.CommandType.StoredProcedure);
-            return new ActionServiceResult()
+            param.Add("@customerCode", customerCode);
+            var customers = _baseRepository.Get($"Proc_GetCustomerByCode", param, commandType: CommandType.StoredProcedure).ToList();
+            if(customers.Count == 0)
             {
-                Success = true,
-                Message = "Thành công",
-                MISAcode = Enumeration.MISAcode.Success,
-                data = customers
-            };
+                return null;
+            }
+            return customers[0];
         }
-        public override ActionServiceResult GetEntities(int page, string propertySearch)
+
+        public override ActionServiceResult GetEntities(int pageIndex, int pageSize, string filter)
         {
-            if (propertySearch == null || propertySearch == string.Empty)
+            if (filter == null || filter == string.Empty)
             {
-                propertySearch = "";
+                filter = "";
             }
             // Lấy ra số lượng bản ghi
             var paramQuality = new DynamicParameters();
-            paramQuality.Add("@value", propertySearch);
+            paramQuality.Add("@value", filter);
             var quality = _baseRepository.GetQuality($"Proc_GetQuality{_tableName}", paramQuality, commandType: CommandType.StoredProcedure);
             // Lấy ra số trang
             var totalPage = Math.Ceiling(Convert.ToDouble(quality) / 30);
             var param = new DynamicParameters();
-            param.Add("@page", page * 30);
-            param.Add("@valueSearch", propertySearch);
+            param.Add("@PageIndex", pageIndex);
+            param.Add("@PageSize", pageSize);
+            param.Add("@Filter", filter);
             return new ActionServiceResult()
             {
                 Message = "Lấy dữ liệu thành công",
                 Success = true,
                 MISAcode = Enumeration.MISAcode.Success,
                 TotalPage = totalPage,
-                PageNum = page,
-                data = _baseRepository.Get($"Get_CustomerPaging", param, commandType: CommandType.StoredProcedure)
+                PageNum = pageIndex,
+                data = _baseRepository.Get($"Proc_GetCustomerPaging", param, commandType: CommandType.StoredProcedure)
             };
-            return base.GetEntities(page, propertySearch);
+            return base.GetEntities(pageIndex, pageSize, filter);
         }
 
-        public ActionServiceResult GetCustomerPaging(int limit, int offser)
-        {
-            throw new NotImplementedException();
-        }
+       
 
 
         #endregion

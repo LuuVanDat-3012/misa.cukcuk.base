@@ -10,12 +10,12 @@ namespace MISA.ApplicationCore.Entity
     /// Thông tin khách hàng
     /// </summary>
     /// CreatedBy: LVDat (18/05/2021)
-    public class Customer
+    public class Customer: BaseEntity
     {
         /// <summary>
         /// Id khách hàng
         /// </summary>
-        public Guid Id { get; set; }
+        public Guid CustomerId { get; set; }
         /// <summary>
         /// Mã khách hàng
         /// </summary>

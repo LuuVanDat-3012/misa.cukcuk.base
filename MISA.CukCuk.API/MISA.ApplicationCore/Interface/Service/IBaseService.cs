@@ -7,14 +7,14 @@ namespace MISA.ApplicationCore.Interface
 {
     public interface IBaseService<TEntity>
     {
-       /// <summary>
-       /// Phân trang đối tượng
-       /// </summary>
-       /// <param name="limit">Vị trí bắt đầu lấy</param>
-       /// <param name="offset">Số bản ghi muốn lấy</param>
-       /// <param name="propertySearch">Thông tin tìm kiếm</param>
-       /// <returns></returns>
-        ActionServiceResult GetEntities(int page, string propertySearch);
+        /// <summary>
+        /// Hàm phân trang 1 danh sách đối tượng
+        /// </summary>
+        /// <param name="pageIndex">Vị trí trang</param>
+        /// <param name="pageSize">Số lượng đối tượng trong 1 trang</param>
+        /// <param name="filter">Thông tin tìm kiếm ( nếu có)</param>
+        /// <returns></returns>
+        ActionServiceResult GetEntities(int pageIndex, int pageSize, string filter);
         /// <summary>
         /// Lấy theo id
         /// </summary>
@@ -43,17 +43,14 @@ namespace MISA.ApplicationCore.Interface
         /// CreatedBy: LVDat (26/5/2021)
         ActionServiceResult DeleteEntity(Guid entityId);
         /// <summary>
-        /// Phân trang danh sách entity
+        /// Hàm điều hướng các editmode 
+        /// None = 0,
+        /// Add = 1,
+        /// Edit = 2,
+        /// Delete = 4
         /// </summary>
-        /// <param name="entityName"></param>
-        /// <returns></returns>
-        ActionServiceResult PagingEntity(string entityInfo);
-
-        /// <summary>
-        /// Xoá danh sách theo id
-        /// </summary>
-        /// <param name="guids">đânh sách id</param>
-        /// <returns>Số dòng bị ảnh hưởng</returns>
-        ActionServiceResult DeeteMultiple(Guid[] guids);
+        /// <param name="entities">Danh sách đối tượng cần thao tác</param>
+        /// <returns>ActionServiceResult</returns>
+        ActionServiceResult SaveData(List<TEntity> entities);
     }
 }

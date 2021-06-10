@@ -59,7 +59,7 @@ namespace MISA.ApplicationCore.Entity
             this.Msg = msg;
         }
     }
-    public class BaseEntity
+    public class EntityBase
     {
 
     }

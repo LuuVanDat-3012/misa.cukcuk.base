@@ -5,7 +5,7 @@
       <div class="page">
         <div class="btn-firstpage navigate-page"></div>
         <div class="btn-prev-page navigate-page"></div>
-        <div class="page-number" v-for="index in totalPage" :key="index"  :class="{isSelected: Selected(index)}">
+        <div class="page-number" v-for="index in 4" :key="index"  :class="{isSelected: Selected(index)}">
           {{ index }}
         </div>
         <div class="btn-next-page navigate-page"></div>

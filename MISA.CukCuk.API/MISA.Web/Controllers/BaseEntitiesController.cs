@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace MISA.Web.Controllers
 {
-    [Route("v1/api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class BaseEntitiesController<TEntity> : ControllerBase
     {
@@ -21,9 +21,9 @@ namespace MISA.Web.Controllers
         }
         // GET: api/<BaseEntitiesController>
         [HttpGet]
-        public IActionResult Get([FromQuery] int page, [FromQuery] string propertySearch)
+        public IActionResult Get([FromQuery] int pageIndex,[FromQuery] int pageSize, [FromQuery] string filter)
         {
-            return Ok(_baseService.GetEntities(page, propertySearch));
+            return Ok(_baseService.GetEntities(pageIndex, pageSize, filter));
         }
 
         // GET api/<BaseEntitiesController>/5
@@ -35,23 +35,10 @@ namespace MISA.Web.Controllers
 
         // POST api/<BaseEntitiesController>
         [HttpPost]
-        public IActionResult Post([FromBody] TEntity entity)
+        public IActionResult Post([FromBody] List<TEntity> entities)
         {
-            return Ok(_baseService.AddEntity(entity));
+            return Ok(_baseService.SaveData(entities));
         }
 
-        // PUT api/<BaseEntitiesController>/5
-        [HttpPut]
-        public IActionResult Put( [FromBody] TEntity entity)
-        {
-            return Ok(_baseService.UpdateEntity(entity));
-        }
-
-        // DELETE api/<BaseEntitiesController>/5
-        [HttpDelete("{id}")]
-        public IActionResult Delete(string id)
-        {
-            return Ok(_baseService.DeleteEntity(Guid.Parse(id)));
-        }
     }
 }
